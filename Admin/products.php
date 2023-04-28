@@ -48,7 +48,7 @@ include("include/layouts/header.php")
                                         echo "<td>" . $row["availability"] . "</td>";
                                         echo "<td>" . $row["category"] . "</td>";
                                         echo "<td><img src='uploads/product/" . $row["image"] . "' width='100' height='100'></td>";
-                                        echo '<td><a class="btn btn-info" href="update.php?id=' . $row["id"] . '">Update</a> | <a class="btn btn-danger" href="delete.php?id=' . $row["id"] . '">Delete</a></td>';
+                                        echo '<td><a class="btn btn-info" href="updateProduct.php?id=' . $row["id"] . '">Update</a> | <a class="btn btn-danger" href="deleteProduct.php?id=' . $row["id"] . '">Delete</a></td>';
                                         echo "</tr>";
 
                                     }
