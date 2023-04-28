@@ -70,7 +70,7 @@ CREATE TABLE `product` (
   `price` int(50) NOT NULL,
   `availability` tinyint(1) NOT NULL DEFAULT 1,
   `categoryID` int(11) NOT NULL,
-  `image` int(11) NOT NULL
+  `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -86,7 +86,7 @@ CREATE TABLE `users` (
   `password` varchar(20) NOT NULL,
   `room` varchar(30) NOT NULL,
   `ext` int(30) NOT NULL,
-  `role` varchar(30) NOT NULL,
+  `role` enum('admin','user') NOT NULL,
   `profile_picture` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
