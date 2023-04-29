@@ -454,7 +454,7 @@
                                 <button class="active" data-filter="*">All</button>
                                 <?php
                                     include "../Admin/include/connection.php";
-                                    $sql = "SELECT id, name FROM category"; // get categories from the database
+                                    $sql = "SELECT id, name FROM category"; 
                                     $result = $db->query($sql);
                                     if ($result->rowCount() > 0) {
                                         foreach ($result as $row) {

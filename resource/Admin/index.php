@@ -75,11 +75,11 @@ include("include/layouts/header.php")
                                     <option>Select an user</option>
                                     <?php
                                         include "include/connection.php";
-                                        $sql = "SELECT DISTINCT name FROM users"; // get distinct names from the database
+                                        $sql = "SELECT DISTINCT name FROM users"; 
                                         $result = $db->query($sql);
                                         if ($result->rowCount() > 0) {
                                             foreach ($result as $row) {
-                                                echo '<option value="'.$row['name'].'">'.$row['name'].'</option>'; // generate an option for each name
+                                                echo '<option value="'.$row['name'].'">'.$row['name'].'</option>'; 
                                             }
                                         }
                                     ?>
@@ -128,11 +128,9 @@ include("include/layouts/header.php")
     productId.addEventListener("click", () => {
       const formContainer = document.getElementById("formContainer");
 
-      // Create a new div element to hold the form controls
       const formGroup = document.createElement("div");
       formGroup.classList.add("col");
 
-      // Create the label and input elements
       const label = document.createElement("label");
       label.classList.add("form-label");
       label.textContent = productId.querySelector(".productName").textContent;
@@ -142,7 +140,6 @@ include("include/layouts/header.php")
       input.setAttribute("name", "productPrice");
       input.setAttribute("value", productId.querySelector(".productPrice").textContent);
 
-      // Create the cancel button
       const cancelButton = document.createElement("button");
       cancelButton.classList.add("btn", "btn-danger");
       cancelButton.textContent = "X";
@@ -151,15 +148,13 @@ include("include/layouts/header.php")
         calculateTotal();
       });
 
-      // Append the label, input and cancel button elements to the form group div
       formGroup.appendChild(label);
       formGroup.appendChild(input);
       formGroup.appendChild(cancelButton);
 
-      // Append the form group div to the form container
       formContainer.appendChild(formGroup);
 
-      calculateTotal(); // Calculate total price when a new product is added
+      calculateTotal(); 
     });
   });
 
@@ -169,8 +164,8 @@ include("include/layouts/header.php")
 
     inputs.forEach(input => {
       total += parseFloat(input.value);
-      input.removeEventListener("input", calculateTotal); // remove previous event listener to prevent infinite loop
-      input.addEventListener("input", calculateTotal); // add new event listener
+      input.removeEventListener("input", calculateTotal); 
+      input.addEventListener("input", calculateTotal); 
     });
 
     const totalElement = document.getElementById("total");
