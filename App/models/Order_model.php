@@ -1,6 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-require_once 'App\models\Core\dbConnection.php';
+include("Core/dbConnection.php");
 
 class Order{
 
@@ -93,13 +96,20 @@ class Order{
 //     return $order;
 // }
 
-// function selectALLOrders(){
-//     $conn=  $this->connectDb();
+function selectALLOrders(){
+
+    $conn = connectDb();
     
-//     $stmt= $conn->prepare("select * from users, products,orders,product_order where orders.order_id=product_order.order_id and products.product_id =product_order.product_id and users.user_id = orders.user_id ;");
-//     $stmt->execute();
-//     $order= $stmt->fetchAll();
-//     return $order;
-// }
+    $stmt = $conn->prepare("SELECT u.name,u.room,u.ext, p.name,p.price,p.image , o.*, po.quantity 
+    FROM `order` o 
+    JOIN `users` u ON o.userID = u.id 
+    JOIN order_product op ON op.order_id = o.id 
+    JOIN product p ON p.id = op.product_id 
+    JOIN order_product po ON po.order_id = o.id
+    ORDER BY o.id");
+    $stmt->execute();
+    $order= $stmt->fetchAll();
+    return $order;
+}
  }
 ?>

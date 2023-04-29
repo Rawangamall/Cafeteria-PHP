@@ -1,5 +1,6 @@
 <?php
-include("include/layouts/header.php")
+include("include/layouts/header.php");
+include("../../App/http/Controllers/CheckController.php");
 ?>
 <style>
 .btn{
@@ -32,6 +33,7 @@ include("include/layouts/header.php")
 
     </div>
         <!-------------------------------------------- main page ---------------------->
+
 <form action="" method=""> 
 <div class="form-group col-lg-6" style="display:flex;" >
 
@@ -43,42 +45,35 @@ include("include/layouts/header.php")
 
 <div class="form-group col-lg-6" style="margin-top:8px;">
                     <select class="form-control" name="room">
-                      <option value="">Select No.ROOM</option>
-                      <option value="Application 1">Application 1</option>
-                      <option value="Application 2">Application 2</option>
-                      <option value="cloud">Cloud</option>
+                      <option value="">Select User</option>
+                      <?php foreach ($allusers as $user)  {?>
+                      <option value="<?php $user["name"] ?>"><?php echo $user["name"] ?></option>
+                      <?php }?>
+
                     </select>
                   </div>
+
 </form>
+    <table class="table table-hover" style="text-align:center;">
+      <thead>
+        <tr>
+          <th scope="col">Name </th>
+          <th scope="col">Total amount</th>
+        </tr>
+      </thead>
+      <?php foreach ($usersamount as $user){ ?>
+      <tbody>
+        <tr>
+          <td>
+            <button name="plus" class="btn"><i class="fa fa-plus"></i></button>
+            <span class="btn-text"><?php echo $user["name"] ?></span>
+          </td>
+          <td><?php echo $user["total_amount"] ?></td>
+        </tr>
+      </tbody>
+      <?php } ?>
 
-        <table class="table table-hover" style="text-align:center;">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Total amount</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-    <button name="plus" class="btn"><i class="fa fa-plus"></i></button>
-    <span class="btn-text">Mark</span>
-
-      </td>
-      <td>100$</td>
-    </tr>
-    <tr>
-      <td>
-    <button name="plus" class="btn"><i class="fa fa-plus"></i></button>
-    <span class="btn-text">Mark</span>
-     </td>
-      <td>20$</td>
-    </tr>
-    <tr>
-      <td colspan="2">Larry the Bird</td>
-    </tr>
-  </tbody>
-</table>
+    </table>
 
 </div>
 
