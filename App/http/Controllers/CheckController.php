@@ -10,6 +10,10 @@ include("../../App/models/user_model.php");
     $user=new User();
     $allusers= $user->selectAll();
     $usersamount= $user->totalamount();
+    
+    $userId = $_POST['userId'];
+    var_dump($userId);
+    $Oneuser= $user->selectUser(2);
 
-   // print_r($usersamount);
+    
 ?>

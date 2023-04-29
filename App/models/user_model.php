@@ -107,15 +107,15 @@ class User
         
     // }
 
-    // function selectUser ($id){
-    //     $conn=  $this->connectDb();
-    //     $stmt= $conn->prepare("SELECT * FROM users WHERE user_id=$id ;");
-    //     $stmt->execute();
-    //     $user = $stmt->fetch();
-    //     return $user;
+    function selectUser ($id){
+        $conn=  connectDb();
+        $stmt= $conn->prepare("SELECT * FROM users WHERE id= $id ;");
+        $stmt->execute();
+        $user = $stmt->fetch();
+        return $user;
        
-    //     $conn = null;
-    // }
+        $conn = null;
+    }
 
     // function updateUser ($id, $name,$email,$password,$image,$room,$ext ){
     //     $conn=  $this->connectDb();

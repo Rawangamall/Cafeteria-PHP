@@ -2,6 +2,28 @@
 include("include/layouts/header.php");
 include("../../App/http/Controllers/CheckController.php");
 ?>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dropdown = document.getElementById('user-dropdown');
+        dropdown.addEventListener('change', function() {
+      
+      var userId = this.value;
+      console.log(userId);
+  //    var xhr = new XMLHttpRequest();
+  //   xhr.open('POST', '../../App/http/Controllers/CheckController.php');
+  //   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  //   xhr.onload = function() {
+  //     if (xhr.status === 200) {
+  //       console.log("here");
+  //       // console.log(xhr.responseText);
+  //     }
+  //   };
+  //   xhr.send('userId=' + userId);
+         });
+   });
+  
+</script>
+
 <style>
 .btn{
   border: none;
@@ -34,9 +56,8 @@ include("../../App/http/Controllers/CheckController.php");
     </div>
         <!-------------------------------------------- main page ---------------------->
 
-<form action="" method=""> 
 <div class="form-group col-lg-6" style="display:flex;" >
-
+<form action="" method="">
 <label for="from-date">FROM</label>
 <input placeholder="Select date" type="date" id="from-date" name="Fromdate" class="form-control" style="display:inline-block;">
 <label for="from-date">&nbsp;&nbsp;TO</label>
@@ -44,16 +65,16 @@ include("../../App/http/Controllers/CheckController.php");
 </div>
 
 <div class="form-group col-lg-6" style="margin-top:8px;">
-                    <select class="form-control" name="room">
+                    <select class="form-control" name="userId" id="user-dropdown">
                       <option value="">Select User</option>
                       <?php foreach ($allusers as $user)  {?>
-                      <option value="<?php $user["name"] ?>"><?php echo $user["name"] ?></option>
+                      <option value="<?php echo $user["id"] ?>"><?php echo $user["name"] ?></option>
                       <?php }?>
-
                     </select>
                   </div>
 
-</form>
+                      </form>
+<!-- ---------------------------------------------- -->
     <table class="table table-hover" style="text-align:center;">
       <thead>
         <tr>
@@ -61,7 +82,12 @@ include("../../App/http/Controllers/CheckController.php");
           <th scope="col">Total amount</th>
         </tr>
       </thead>
-      <?php foreach ($usersamount as $user){ ?>
+      <?php
+      if (isset($_POST["user"]) && $_POST["user"]!= "") {
+       $userId = $_POST["user"];
+       var_dump($userId);
+      }else{
+       foreach ($usersamount as $user){ ?>
       <tbody>
         <tr>
           <td>
@@ -71,8 +97,8 @@ include("../../App/http/Controllers/CheckController.php");
           <td><?php echo $user["total_amount"] ?></td>
         </tr>
       </tbody>
-      <?php } ?>
-
+      <?php } }?>
+       
     </table>
 
 </div>
