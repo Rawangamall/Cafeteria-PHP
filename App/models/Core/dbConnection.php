@@ -1,7 +1,7 @@
 <?php
 // connect to database
 
-function connectDb (){
+function connectDb(){
 
     $db_user = "php-jimmy";
     $db_pass = "Aa123456";

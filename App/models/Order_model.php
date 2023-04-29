@@ -97,14 +97,13 @@ class Order{
 
 
 function updateOrder($id,$status){
-    $conn= connectDb();
+    $conn=  $this->connectDb();
     
     $stmt= $conn->prepare("UPDATE `order` SET `status` = '".$status."' WHERE `order`.`id` = '".$id."';");
     $stmt->execute();
     $order= $stmt->fetchAll();
     return $order;
 }
-
 function selectALLOrders(){
 
     $conn = connectDb();
