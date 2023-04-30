@@ -11,21 +11,24 @@ include("/opt/lampp/htdocs/cafeteria/App/models/user_model.php");
     $allusers= $user->selectAll();
     $usersamount= $user->totalamount();
 
-   if (isset($_POST['userId']) && $_POST['userId'] != "") {
+    if (isset($_POST['userId']) && $_POST['userId'] != "") {
         $userId = $_POST['userId'];
-        $Oneuser= $user->selectUser($userId);
+        $Usertotal= $user->Usertotalamount($userId);
         echo '
         <tr>
           <td>
             <button name="plus" class="btn"><i class="fa fa-plus"></i></button>
-            <span class="btn-text">' . $Oneuser["name"] . '</span>
+            <span class="btn-text">' . $Usertotal[0]['name'] . '</span>
           </td>
+          <td>  <span class="btn-text">' .$Usertotal[0]['total_amount']. '</span></td>
         </tr>
       ';
     }
     
-   // error_log(print_r($_POST, true));
-//          <td>' . $Oneuser["total_amount"] . '</td>
-
-    
+    if (isset($_POST['BtnuserId']) && $_POST['BtnuserId'] != "") {
+        $userId = $_POST['BtnuserId'];
+        $userOrders= $user->selectUserOrders($userId);
+        header('Content-Type: application/json');
+        echo json_encode($userOrders);  
+      }
 ?>
