@@ -31,23 +31,21 @@ include("../../App/http/controllers/order/manual_oder.php");
     
 
     foreach ($allOrders as  $row) : 
-      var_dump($row['id']);
    
         ?>
         
-      <tr>
+      <tr class="$row['id']">
       <td><?php echo date('j F Y', strtotime($row['date'])); ?></td>
         <td><?php echo $row['name'];?></td>
         <td><?php echo $row['room'];?></td>
         <td><?php echo $row['ext'];?></td>
         <td>
-        <button class="deliver-btn" data-order-id="<?php echo $row['id']; ?>">Deliver </button>
-
+        <button class="btn btn-primary deliver-btn" data-order-id="<?php echo $row['id']; ?>">Deliver</button>
   
   </td>
       </tr>
       
-      <tr>
+      <tr class="$row['id']">
         <td colspan="5">
           <div class="card-group">
             <?php $productArray = json_decode('[' . $row["products"] . ']', true);
@@ -74,27 +72,35 @@ include("../../App/http/controllers/order/manual_oder.php");
   
 </div>
 <script>
-$('.deliver-btn').on('click', function() {
-  console.log('clicked', $(this).data('orderId'));
-  var orderId = $(this).data('orderId');
-  $.ajax({
-    url: '../../App/http/controllers/order/update_order_status.php',
-    method: 'POST',
-    data: {orderId: orderId, status: 'out of delivery'},
-    success: function(response) {
-      // Update the UI to show that the order has been delivered
-      $(this).prop('disabled', true).text('Delivered');
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.error(errorThrown);
-    }
+document.querySelectorAll('.deliver-btn').forEach(function(button) {
+  button.addEventListener('click', function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '../../App/http/controllers/order/update_order_status.php');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var response = xhr.responseText;
+        // Update the UI to show that the order has been delivered
+        button.disabled = true;
+        button.textContent = 'Delivered';
+        // Remove the row from the table
+         row = button.closest('tr');
+       
+
+        row.parentNode.removeChild(row.nextElementSibling);
+        row.parentNode.removeChild(row);
+      } else {
+        console.error('Error:', xhr.statusText);
+      }
+    };
+    xhr.onerror = function() {
+      console.error('Error:', xhr.statusText);
+    };
+    xhr.send('orderId=' + button.getAttribute('data-order-id') + '&status=out of delivery');
   });
 });
+
 </script>
-     <script src="assets/vendor/jquery/jquery.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Core plugin JavaScript-->
-    <!-- <script src="jquery-3.5.1.js"></script>  -->
 <?php
 include "include/layouts/footer.php"
 ?>

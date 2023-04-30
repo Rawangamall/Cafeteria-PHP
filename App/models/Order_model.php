@@ -1,8 +1,10 @@
+
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-require_once("Core/dbConnection.php");
-
-
+include("Core/dbConnection.php");
 
 class Order{
 
@@ -95,43 +97,66 @@ class Order{
 //     return $order;
 // }
 
-
 function updateOrder($id,$status){
-    $conn=  $this->connectDb();
-    
-    $stmt= $conn->prepare("UPDATE `order` SET `status` = '".$status."' WHERE `order`.`id` = '".$id."';");
-    $stmt->execute();
-    $order= $stmt->fetchAll();
-    return $order;
+  $conn= connectDb();
+  
+  $stmt= $conn->prepare("UPDATE `order` SET `status` = '".$status."' WHERE `order`.`id` = '".$id."';");
+  $stmt->execute();
+  $order= $stmt->fetchAll();
+  return $order;
 }
+
+
+
 function selectALLOrders(){
 
-    $conn = connectDb();
-    
-   
+  $conn = connectDb();
+  
+ 
 
-$stmt = $conn->prepare("SELECT u.name,u.room,u.ext, 
-o.*, 
-GROUP_CONCAT(
+  $stmt = $conn->prepare("SELECT u.name,u.room,u.ext, 
+  o.*, 
+  GROUP_CONCAT(
   JSON_OBJECT(
     'name', p.name,
     'price', p.price,
     'image', p.image,
     'quantity', op.quantity
   )
-) AS products,
-SUM(p.price * op.quantity) AS total_price
-FROM `order` o 
-JOIN `users` u ON o.userID = u.id 
-JOIN order_product op ON op.order_id = o.id 
-JOIN product p ON p.id = op.product_id 
-WHERE o.status = 'processing'
-GROUP BY o.id
-ORDER BY o.id");
+  ) AS products,
+  SUM(p.price * op.quantity) AS total_price
+  FROM `order` o 
+  JOIN `users` u ON o.userID = u.id 
+  JOIN order_product op ON op.order_id = o.id 
+  JOIN product p ON p.id = op.product_id 
+  WHERE o.status = 'processing'
+  GROUP BY o.id
+  ORDER BY o.id");
     
     $stmt->execute();
     $order= $stmt->fetchAll();
     return $order;
-}
+  }
  }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
