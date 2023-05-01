@@ -108,6 +108,11 @@ class User
         return $totalamount;
                 $conn = null;
     }
+
+    function order_products($id){
+        $conn= connectDb();
+
+    } 
     // function delete($id){
     //     $conn=  $this->connectDb();
     //     $stmt= $conn->prepare("DELETE FROM users WHERE user_id=$id ;");
