@@ -4,29 +4,29 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include("Core/dbConnection.php");
+// include("Core/dbConnection.php");
 
 class Order{
 
 
 
-// function insertOrder($note,$amount,$user_id){
+function insertOrder($note,$amount,$userID){
        
-//     $conn= $this->connectDb();
+    $conn= $this->connectDb();
    
-//     // prepare sql and bind parameters
-//     $stmt = $conn->prepare("INSERT INTO orders (note,amount,user_id) 
-//     VALUES (:note, :amount, :user_id)");
-//     $stmt->bindParam(':note', $note);
-//     $stmt->bindParam(':amount', $amount);
-//     $stmt->bindParam(':user_id', $user_id);
-//     $stmt->execute();
-//     $statement=$conn->prepare("SELECT LAST_INSERT_ID();");
-//     $statement->execute();
-//     $id=$statement->fetch();
-//     $conn = null;
-//    return $id[0];
-// }
+    // prepare sql and bind parameters
+    $stmt = $conn->prepare("INSERT INTO orders (note,amount,userID) 
+    VALUES (:note, :amount, :userID)");
+    $stmt->bindParam(':note', $note);
+    $stmt->bindParam(':amount', $amount);
+    $stmt->bindParam(':userID', $userID);
+    $stmt->execute();
+    $statement=$conn->prepare("SELECT LAST_INSERT_ID();");
+    $statement->execute();
+    $id=$statement->fetch();
+    $conn = null;
+   return $id[0];
+}
 
 
 // function insertProductOrder($order_id,$product_id,$amount_product){
