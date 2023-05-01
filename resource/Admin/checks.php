@@ -2,27 +2,7 @@
 include("include/layouts/header.php");
 include("../../App/http/Controllers/CheckController.php");
 ?>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var dropdown = document.getElementById('user-dropdown');
-        dropdown.addEventListener('change', function() {
-      
-      var userId = this.value;
-      console.log(userId);
-  //    var xhr = new XMLHttpRequest();
-  //   xhr.open('POST', '../../App/http/Controllers/CheckController.php');
-  //   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  //   xhr.onload = function() {
-  //     if (xhr.status === 200) {
-  //       console.log("here");
-  //       // console.log(xhr.responseText);
-  //     }
-  //   };
-  //   xhr.send('userId=' + userId);
-         });
-   });
-  
-</script>
+
 
 <style>
 .btn{
@@ -75,7 +55,7 @@ include("../../App/http/Controllers/CheckController.php");
 
                       </form>
 <!-- ---------------------------------------------- -->
-    <table class="table table-hover" style="text-align:center;">
+    <table class="table table-hover" style="text-align:center;" id="alluser">
       <thead>
         <tr>
           <th scope="col">Name </th>
@@ -83,27 +63,105 @@ include("../../App/http/Controllers/CheckController.php");
         </tr>
       </thead>
       <?php
-      if (isset($_POST["user"]) && $_POST["user"]!= "") {
-       $userId = $_POST["user"];
-       var_dump($userId);
-      }else{
        foreach ($usersamount as $user){ ?>
-      <tbody>
+      <tbody >
         <tr>
           <td>
-            <button name="plus" class="btn"><i class="fa fa-plus"></i></button>
+          <button class="btn userbtn" data-userid="<?php echo $user["id"]; ?>"><i class="fa fa-plus"></i></button>
             <span class="btn-text"><?php echo $user["name"] ?></span>
           </td>
           <td><?php echo $user["total_amount"] ?></td>
         </tr>
       </tbody>
-      <?php } }?>
-       
-    </table>
+      <?php } ?>
 
+    </table>
+    <table class="table table-hover" style="text-align:center; visibility: hidden;" id="oneuser" >
+      <thead>
+        <tr>
+          <th scope="col">Name </th>
+          <th scope="col">Total amount</th>
+        </tr>
+      </thead>
+      <tbody id="displayuser">
+
+       </tbody>
+       </table>
+
+       <!-- ---------------------orders------------------------>
+       
+       <table class="table table-hover" style="text-align:center; visibility: hidden;" id="userOrders" >
+      <thead>
+        <tr>
+          <th scope="col">Order Date </th>
+          <th scope="col">Amount</th>
+        </tr>
+      </thead>
+       <tbody id="displayorders">
+
+       </tbody>
+       </table>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dropdown = document.getElementById('user-dropdown');
+        dropdown.addEventListener('change', function() {
+      
+      var userId = this.value;
+      console.log(userId);
+      var xhr = new XMLHttpRequest();
+    xhr.open('POST', '../../App/http/Controllers/CheckController.php');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
 
+      if (xhr.status === 200)
+ {
+      var response = xhr.responseText;
+      document.getElementById("displayuser").innerHTML = response;
+      document.getElementById("oneuser").style.visibility =" visible";
+      document.getElementById("alluser").style.display = "none";
+    //  console.log(response);
+      }
+    };
+    console.log('userId', userId);
+    xhr.send('userId=' + userId);
+         });
+   });
+  
+  // ---------------------------orders-----------------------------------
+
+
+  var UserBtns = document.querySelectorAll(".userbtn");
+UserBtns.forEach(function(UserBtn) {
+  UserBtn.addEventListener("click", function() {
+    var BtnuserId = UserBtn.getAttribute("data-userid");
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "../../App/http/Controllers/CheckController.php");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log(xhr.responseText);
+        var orders = JSON.parse(xhr.responseText);
+     document.getElementById("userOrders").style.visibility =" visible";
+    var tbody = document.getElementById("displayorders");
+    tbody.innerHTML = ""; // Clear existing rows
+
+    for (var i = 0; i < orders.length; i++) {
+      var order = orders[i];
+      var row = tbody.insertRow(i);
+      var dateCell = row.insertCell(0);
+      var amountCell = row.insertCell(1);
+      dateCell.textContent = order[3];
+      amountCell.textContent = order[5];
+    }
+      }
+    };
+    xhr.send("BtnuserId=" + BtnuserId);
+  });
+});
+
+</script>
 
 <?php
 include "include/layouts/footer.php"

@@ -96,6 +96,18 @@ class User
         $conn = null;
     }
 
+    function Usertotalamount($id){
+        $conn= connectDb();
+
+        $stmt = $conn->prepare("SELECT u.name, SUM(o.amount) as total_amount 
+        FROM users u INNER JOIN `order` o ON u.id = o.userID and u.id = $id");
+
+        $stmt->execute();
+        $totalamount = $stmt->fetchAll();  
+        
+        return $totalamount;
+                $conn = null;
+    }
     // function delete($id){
     //     $conn=  $this->connectDb();
     //     $stmt= $conn->prepare("DELETE FROM users WHERE user_id=$id ;");
@@ -117,6 +129,15 @@ class User
         $conn = null;
     }
 
+    function selectUserOrders ($id){
+        $conn=  connectDb();
+        $stmt= $conn->prepare("SELECT * FROM `order`o WHERE o.userID = $id;");
+        $stmt->execute();
+        $userOrders = $stmt->fetchAll();
+        return $userOrders;
+       
+        $conn = null;
+    }
     // function updateUser ($id, $name,$email,$password,$image,$room,$ext ){
     //     $conn=  $this->connectDb();
     //     $stmt = $conn->prepare("UPDATE users SET user_name=:name, user_email=:email, user_password=:password,
