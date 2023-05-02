@@ -109,20 +109,57 @@ include("../../App/http/Controllers/CheckController.php");
         dropdown.addEventListener('change', function() {
       
       var userId = this.value;
-      console.log(userId);
       var xhr = new XMLHttpRequest();
     xhr.open('POST', '../../App/http/Controllers/CheckController.php');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {
 
-      if (xhr.status === 200)
- {
-      var response = xhr.responseText;
-      document.getElementById("displayuser").innerHTML = response;
-      document.getElementById("oneuser").style.visibility =" visible";
-      document.getElementById("alluser").style.display = "none";
-    //  console.log(response);
-      }
+if (xhr.status === 200) {
+    var user = JSON.parse(xhr.responseText);
+    document.getElementById("oneuser").style.visibility =" visible";
+    document.getElementById("alluser").style.display = "none";
+
+    var tbody = document.getElementById("displayuser");
+    tbody.innerHTML = ""; // Clear existing rows
+
+    var row = tbody.insertRow(0);
+    var nameCell = row.insertCell(0);
+    var amountCell = row.insertCell(1);
+
+    const button = '<button class="btn userbtn" data-userid="' + user[0]['id'] + '"><i class="fa fa-plus"></i></button>';
+    nameCell.innerHTML = user[0]['name'] + ' ' + button;
+    amountCell.textContent = user[0]['total_amount'];
+
+    // Add event listener to the button
+    var buttonElement = nameCell.querySelector('.userbtn');
+    buttonElement.addEventListener('click', function() {
+        var BtnuserId = this.getAttribute('data-userid');
+        console.log('Button clicked with user ID:', BtnuserId);
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open('POST', '../../App/http/Controllers/CheckController.php');
+        xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr2.onload = function() {
+            if (xhr2.status === 200) {
+           //   console.log(xhr2.responseText);
+        var orders = JSON.parse(xhr2.responseText); 
+        document.getElementById("userOrders").style.visibility =" visible";
+        var tbody = document.getElementById("displayorders");
+    tbody.innerHTML = ""; // Clear existing rows
+    for (var i = 0; i < orders.length; i++) {
+  var order = orders[i];
+  var row = tbody.insertRow(i);
+  var dateCell = row.insertCell(0);
+  var amountCell = row.insertCell(1);
+  const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
+  dateCell.innerHTML = order[3] + ' ' + button; 
+  amountCell.textContent = order[5];
+};
+            }
+        };
+        xhr2.send('BtnuserId=' + BtnuserId);
+    });
+}
+
     };
     console.log('userId', userId);
     xhr.send('userId=' + userId);
@@ -152,7 +189,7 @@ include("../../App/http/Controllers/CheckController.php");
   var dateCell = row.insertCell(0);
   var amountCell = row.insertCell(1);
   const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
-  dateCell.innerHTML = order[3] + ' ' + button; // use innerHTML to set the HTML content
+  dateCell.innerHTML = order[3] + ' ' + button; 
   amountCell.textContent = order[5];
 }
       }
@@ -161,33 +198,7 @@ include("../../App/http/Controllers/CheckController.php");
   });
 });
 
-  // ---------------------------order products-----------------------------------
 
-  var UserBtns = document.querySelectorAll(".orderbtn");
-   UserBtns.forEach(function(UserBtn) {
-  UserBtn.addEventListener("click", function() {
-    var BtnuserId = UserBtn.getAttribute("data-orderid");
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "../../App/http/Controllers/CheckController.php");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        console.log(xhr.responseText);
-//         var orders = JSON.parse(xhr.responseText);
-//      document.getElementById("userOrders").style.visibility =" visible";
-//     var tbody = document.getElementById("displayorders");
-//     tbody.innerHTML = ""; // Clear existing rows
-//     for (var i = 0; i < orders.length; i++) {
-//   var order = orders[i];
-//   var row = tbody.insertRow(i);
-//   var dateCell = row.insertCell(0);
-//   dateCell.innerHTML = order[3] ; // use innerHTML to set the HTML content
-// }
-      }
-    };
-    xhr.send("BtnuserId=" + BtnuserId);
-  });
-});
 </script>
 
 <?php

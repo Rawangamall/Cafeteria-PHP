@@ -1,6 +1,6 @@
 <?php
 
-// include("Core/dbConnection.php");
+ include("Core/dbConnection.php");
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -99,7 +99,7 @@ class User
     function Usertotalamount($id){
         $conn= connectDb();
 
-        $stmt = $conn->prepare("SELECT u.name, SUM(o.amount) as total_amount 
+        $stmt = $conn->prepare("SELECT u.id ,u.name, SUM(o.amount) as total_amount 
         FROM users u INNER JOIN `order` o ON u.id = o.userID and u.id = $id");
 
         $stmt->execute();
