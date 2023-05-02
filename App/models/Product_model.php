@@ -8,8 +8,6 @@ error_reporting(E_ALL);
 class Product{
 
 
-
-
     function selectALLProducts(){
 
         $conn = connectDb();
@@ -21,12 +19,27 @@ class Product{
           $order= $stmt->fetchAll();
           
           return $order;
+          $conn = null;
+
         }
-     }
+     
 
 
-  
- 
+     function orderProducts($id){
+      $conn= connectDb();
+
+      $stmt = $conn->prepare("SELECT product.name, product.image , order_product.quantity
+      FROM product 
+      INNER JOIN order_product ON order_product.product_id = product.id 
+      WHERE order_product.order_id = $id;");
+
+      $stmt->execute();
+      $products = $stmt->fetchAll();  
+      
+      return $products;
+        $conn = null;
+  }
+}
 ?>
 
 

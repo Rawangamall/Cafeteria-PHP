@@ -34,7 +34,7 @@ include("../../App/http/Controllers/CheckController.php");
         <h1 class="h3 mb-0 text-gray-800">Checks</h1>
 
     </div>
-        <!-------------------------------------------- main page ---------------------->
+        <!------------------------------ main page ------------------------->
 
 <div class="form-group col-lg-6" style="display:flex;" >
 <form action="" method="">
@@ -52,9 +52,10 @@ include("../../App/http/Controllers/CheckController.php");
                       <?php }?>
                     </select>
                   </div>
-
                       </form>
-<!-- ---------------------------------------------- -->
+
+        <!-- --------------------------------------------------------------- -->
+
     <table class="table table-hover" style="text-align:center;" id="alluser">
       <thead>
         <tr>
@@ -101,6 +102,18 @@ include("../../App/http/Controllers/CheckController.php");
 
        </tbody>
        </table>
+
+       <table class="table table-hover" style="text-align:center; visibility: hidden;" id="orderproducts" >
+      <thead>
+        <tr>
+          <th scope="col">Product Name </th>
+          <th scope="col">Product Quantity</th>
+        </tr>
+      </thead>
+       <tbody id="displayproducts">
+
+       </tbody>
+       </table>
 </div>
 
 <script>
@@ -109,20 +122,93 @@ include("../../App/http/Controllers/CheckController.php");
         dropdown.addEventListener('change', function() {
       
       var userId = this.value;
-      console.log(userId);
       var xhr = new XMLHttpRequest();
     xhr.open('POST', '../../App/http/Controllers/CheckController.php');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {
 
-      if (xhr.status === 200)
- {
-      var response = xhr.responseText;
-      document.getElementById("displayuser").innerHTML = response;
-      document.getElementById("oneuser").style.visibility =" visible";
-      document.getElementById("alluser").style.display = "none";
-    //  console.log(response);
-      }
+if (xhr.status === 200) {
+    var user = JSON.parse(xhr.responseText);
+    document.getElementById("oneuser").style.visibility =" visible";
+    document.getElementById("alluser").style.display = "none";
+
+    var tbody = document.getElementById("displayuser");
+    tbody.innerHTML = ""; // Clear existing rows
+
+    var row = tbody.insertRow(0);
+    var nameCell = row.insertCell(0);
+    var amountCell = row.insertCell(1);
+
+    const button = '<button class="btn userbtn" data-userid="' + user[0]['id'] + '"><i class="fa fa-plus"></i></button>';
+    nameCell.innerHTML = user[0]['name'] + ' ' + button;
+    amountCell.textContent = user[0]['total_amount'];
+
+    // Add event listener to the button
+    var buttonElement = nameCell.querySelector('.userbtn');
+    buttonElement.addEventListener('click', function() {
+        var BtnuserId = this.getAttribute('data-userid');
+        console.log('Button clicked with user ID:', BtnuserId);
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open('POST', '../../App/http/Controllers/CheckController.php');
+        xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr2.onload = function() {
+            if (xhr2.status === 200) {
+           //   console.log(xhr2.responseText);
+        var orders = JSON.parse(xhr2.responseText); 
+        document.getElementById("userOrders").style.visibility =" visible";
+        var tbody = document.getElementById("displayorders");
+    tbody.innerHTML = ""; // Clear existing rows
+    for (var i = 0; i < orders.length; i++) {
+  var order = orders[i];
+  var row = tbody.insertRow(i);
+  var dateCell = row.insertCell(0);
+  var amountCell = row.insertCell(1);
+  const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
+  dateCell.innerHTML = order[3] + ' ' + button; 
+  amountCell.textContent = order[5];
+
+  var buttonElement2 = dateCell.querySelector('.orderbtn');
+          buttonElement2.addEventListener('click', function() {
+            var BtnorderId = this.getAttribute('data-orderid');
+            console.log('Button clicked with order ID:', BtnorderId);
+
+            // Send a request to get the details of the order
+            var xhr3 = new XMLHttpRequest();
+            xhr3.open('POST', '../../App/http/Controllers/CheckController.php');
+            xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr3.onload = function() {
+              if (xhr3.status === 200) {
+                var orderDetails = JSON.parse(xhr3.responseText);
+                  console.log(orderDetails);
+                document.getElementById("orderproducts").style.visibility =" visible";
+        var tbody = document.getElementById("displayproducts");
+    tbody.innerHTML = ""; // Clear existing rows
+    for (var i = 0; i < orderDetails.length; i++) {
+  var order = orderDetails[i];
+  var row = tbody.insertRow(i);
+
+  var nameCell = row.insertCell(0);
+  var quantityCell = row.insertCell(1);
+  var imageCell = row.insertCell(2);
+
+  nameCell.textContent = order[0] ;
+  const img = '<img src="assets/img/'+order[1]+'" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
+  imageCell.innerHTML = img;
+  quantityCell.textContent = order[2];
+
+              }
+            };
+          }
+            xhr3.send('BtnorderId=' + BtnorderId);
+          
+          });
+};
+            }
+        };
+        xhr2.send('BtnuserId=' + BtnuserId);
+    });
+}
+
     };
     console.log('userId', userId);
     xhr.send('userId=' + userId);
@@ -133,7 +219,7 @@ include("../../App/http/Controllers/CheckController.php");
 
 
   var UserBtns = document.querySelectorAll(".userbtn");
-UserBtns.forEach(function(UserBtn) {
+   UserBtns.forEach(function(UserBtn) {
   UserBtn.addEventListener("click", function() {
     var BtnuserId = UserBtn.getAttribute("data-userid");
     var xhr = new XMLHttpRequest();
@@ -146,20 +232,56 @@ UserBtns.forEach(function(UserBtn) {
      document.getElementById("userOrders").style.visibility =" visible";
     var tbody = document.getElementById("displayorders");
     tbody.innerHTML = ""; // Clear existing rows
-
     for (var i = 0; i < orders.length; i++) {
-      var order = orders[i];
-      var row = tbody.insertRow(i);
-      var dateCell = row.insertCell(0);
-      var amountCell = row.insertCell(1);
-      dateCell.textContent = order[3];
-      amountCell.textContent = order[5];
-    }
+  var order = orders[i];
+  var row = tbody.insertRow(i);
+  var dateCell = row.insertCell(0);
+  var amountCell = row.insertCell(1);
+  const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
+  dateCell.innerHTML = order[3] + ' ' + button; 
+  amountCell.textContent = order[5];
+  var buttonElement2 = dateCell.querySelector('.orderbtn');
+          buttonElement2.addEventListener('click', function() {
+            var BtnorderId = this.getAttribute('data-orderid');
+            console.log('Button clicked with order ID:', BtnorderId);
+
+            // Send a request to get the details of the order
+            var xhr3 = new XMLHttpRequest();
+            xhr3.open('POST', '../../App/http/Controllers/CheckController.php');
+            xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr3.onload = function() {
+              if (xhr3.status === 200) {
+                var orderDetails = JSON.parse(xhr3.responseText);
+                  console.log(orderDetails);
+                document.getElementById("orderproducts").style.visibility =" visible";
+        var tbody = document.getElementById("displayproducts");
+    tbody.innerHTML = ""; // Clear existing rows
+    for (var i = 0; i < orderDetails.length; i++) {
+  var order = orderDetails[i];
+  var row = tbody.insertRow(i);
+
+  var nameCell = row.insertCell(0);
+  var quantityCell = row.insertCell(1);
+  var imageCell = row.insertCell(2);
+
+  nameCell.textContent = order[0] ;
+  const img = '<img src="assets/img/'+order[1]+'" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
+  imageCell.innerHTML = img;
+  quantityCell.textContent = order[2];
+
+              }
+            };
+          }
+            xhr3.send('BtnorderId=' + BtnorderId);
+          
+          });
+}
       }
     };
     xhr.send("BtnuserId=" + BtnuserId);
   });
 });
+
 
 </script>
 
