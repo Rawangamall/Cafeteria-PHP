@@ -34,7 +34,7 @@ include("../../App/http/Controllers/CheckController.php");
         <h1 class="h3 mb-0 text-gray-800">Checks</h1>
 
     </div>
-        <!-------------------------------------------- main page ---------------------->
+        <!------------------------------ main page ------------------------->
 
 <div class="form-group col-lg-6" style="display:flex;" >
 <form action="" method="">
@@ -52,9 +52,10 @@ include("../../App/http/Controllers/CheckController.php");
                       <?php }?>
                     </select>
                   </div>
-
                       </form>
-<!-- ---------------------------------------------- -->
+
+        <!-- --------------------------------------------------------------- -->
+
     <table class="table table-hover" style="text-align:center;" id="alluser">
       <thead>
         <tr>
@@ -98,6 +99,18 @@ include("../../App/http/Controllers/CheckController.php");
         </tr>
       </thead>
        <tbody id="displayorders">
+
+       </tbody>
+       </table>
+
+       <table class="table table-hover" style="text-align:center; visibility: hidden;" id="orderproducts" >
+      <thead>
+        <tr>
+          <th scope="col">Product Name </th>
+          <th scope="col">Product Quantity</th>
+        </tr>
+      </thead>
+       <tbody id="displayproducts">
 
        </tbody>
        </table>
@@ -153,6 +166,42 @@ if (xhr.status === 200) {
   const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
   dateCell.innerHTML = order[3] + ' ' + button; 
   amountCell.textContent = order[5];
+
+  var buttonElement2 = dateCell.querySelector('.orderbtn');
+          buttonElement2.addEventListener('click', function() {
+            var BtnorderId = this.getAttribute('data-orderid');
+            console.log('Button clicked with order ID:', BtnorderId);
+
+            // Send a request to get the details of the order
+            var xhr3 = new XMLHttpRequest();
+            xhr3.open('POST', '../../App/http/Controllers/CheckController.php');
+            xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr3.onload = function() {
+              if (xhr3.status === 200) {
+                var orderDetails = JSON.parse(xhr3.responseText);
+                  console.log(orderDetails);
+                document.getElementById("orderproducts").style.visibility =" visible";
+        var tbody = document.getElementById("displayproducts");
+    tbody.innerHTML = ""; // Clear existing rows
+    for (var i = 0; i < orderDetails.length; i++) {
+  var order = orderDetails[i];
+  var row = tbody.insertRow(i);
+
+  var nameCell = row.insertCell(0);
+  var quantityCell = row.insertCell(1);
+  var imageCell = row.insertCell(2);
+
+  nameCell.textContent = order[0] ;
+  const img = '<img src="assets/img/'+order[1]+'" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
+  imageCell.innerHTML = img;
+  quantityCell.textContent = order[2];
+
+              }
+            };
+          }
+            xhr3.send('BtnorderId=' + BtnorderId);
+          
+          });
 };
             }
         };
@@ -191,6 +240,41 @@ if (xhr.status === 200) {
   const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
   dateCell.innerHTML = order[3] + ' ' + button; 
   amountCell.textContent = order[5];
+  var buttonElement2 = dateCell.querySelector('.orderbtn');
+          buttonElement2.addEventListener('click', function() {
+            var BtnorderId = this.getAttribute('data-orderid');
+            console.log('Button clicked with order ID:', BtnorderId);
+
+            // Send a request to get the details of the order
+            var xhr3 = new XMLHttpRequest();
+            xhr3.open('POST', '../../App/http/Controllers/CheckController.php');
+            xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr3.onload = function() {
+              if (xhr3.status === 200) {
+                var orderDetails = JSON.parse(xhr3.responseText);
+                  console.log(orderDetails);
+                document.getElementById("orderproducts").style.visibility =" visible";
+        var tbody = document.getElementById("displayproducts");
+    tbody.innerHTML = ""; // Clear existing rows
+    for (var i = 0; i < orderDetails.length; i++) {
+  var order = orderDetails[i];
+  var row = tbody.insertRow(i);
+
+  var nameCell = row.insertCell(0);
+  var quantityCell = row.insertCell(1);
+  var imageCell = row.insertCell(2);
+
+  nameCell.textContent = order[0] ;
+  const img = '<img src="assets/img/'+order[1]+'" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
+  imageCell.innerHTML = img;
+  quantityCell.textContent = order[2];
+
+              }
+            };
+          }
+            xhr3.send('BtnorderId=' + BtnorderId);
+          
+          });
 }
       }
     };

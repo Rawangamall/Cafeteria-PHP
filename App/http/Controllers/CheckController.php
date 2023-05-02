@@ -6,8 +6,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 include("/opt/lampp/htdocs/cafeteria/App/models/user_model.php");
-include("/opt/lampp/htdocs/cafeteria/App/models/Order_model.php");
+include("/opt/lampp/htdocs/cafeteria/App/models/Product_model.php");
 
+
+  $product = new Product();
     $user=new User();
     $allusers= $user->selectAll();
     $usersamount= $user->totalamount();
@@ -28,4 +30,12 @@ include("/opt/lampp/htdocs/cafeteria/App/models/Order_model.php");
         header('Content-Type: application/json');
         echo json_encode($userOrders);  
       }
+
+  if (isset($_POST['BtnorderId']) && $_POST['BtnorderId'] != "") {
+    $orderId = $_POST['BtnorderId'];
+    $Orderproducts= $product->orderProducts($orderId);
+
+    header('Content-Type: application/json');
+    echo json_encode($Orderproducts);  
+  }
 ?>
