@@ -1,6 +1,8 @@
 <?php
 include("include/layouts/header.php");
 include("../../App/http/controllers/order/admin_making_order.php");
+// include("../../App/http/controllers/order/add_order.php");
+
 // include("../../App/http/controllers/order/add_order.php");?>
 
 
@@ -40,7 +42,7 @@ include("../../App/http/controllers/order/admin_making_order.php");
                 </div>
                 <div class="form-group pt-3">
                     <label for="exampleTextarea">Notes</label>
-                    <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                    <textarea class="form-control" id="note" rows="3"></textarea>
                 </div>
                 <div class="form-group pt-3">
                     <label for="exampleDropdown">Room</label>
@@ -48,7 +50,7 @@ include("../../App/http/controllers/order/admin_making_order.php");
                         <select class="form-control" id="exampleDropdown" name="room">
                             <option>Select your room</option>
                            <?php foreach ($allRooms as $room) {
-                                echo '<option value="'.$room['room'].'">'.$room['room_name'].'</option>';
+                                echo '<option value="'.$room['id'].'">'.$room['room_name'].'</option>';
                             }
                             ?>
                          
@@ -60,7 +62,7 @@ include("../../App/http/controllers/order/admin_making_order.php");
 
                 <div class="form-group d-flex flex-column">
                     <div>Total: EGP <span id="total">0.00</span></div>
-                    <button type="button" id="addorder" class="btn btn-success mt-2">Confirm</button>
+                    <button type="button" id="addorder" class="btn btn-success mt-2">Order</button>
                 </div>
 
 
@@ -239,35 +241,68 @@ confirmButton.addEventListener("click", () => {
   const user = document.querySelector("select[name='user']").value;
   const room = document.querySelector("select[name='room']").value;
   const total = document.getElementById("total").textContent;
+  const note = document.getElementById("note").value;
 
-   formData = new FormData();
-  formData.append('user', user);
-  formData.append('room', room);
-  formData.append('total', total);
+  const data = {
+  user: user,
+  room: room,
+  total: total,
+  note: note,
+  products: {}
+};
 
-  rows.forEach(row => {
-    const productId = row.id;
-    const quantityInput = row.querySelector("input[type='number']");
-    const quantity = parseInt(quantityInput.value);
-    formData.append(`products[${productId}]`, quantity);
-  });
+rows.forEach(row => {
+  const productId = row.id;
+  const quantityInput = row.querySelector("input[type='number']");
+  const quantity = parseInt(quantityInput.value);
+  data.products[productId] = quantity;
+});
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', '../../App/http/controllers/order/update_order_status.php');
-  console.log(formData);
-    xhr.send(formData);
 
-  xhr.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      const response = JSON.parse(this.responseText);
-      if (response.status == "success") {
-        alert("Order added successfully");
-        window.location.reload();
-      } else {
-        alert("Error adding order");
-      }
-    }
-  };
+const jsonData = JSON.stringify(data); 
+const params = 'jsondata=' + encodeURIComponent(jsonData);
+
+const xhr = new XMLHttpRequest();
+xhr.open('POST', '../../App/http/controllers/order/add_order.php');
+xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+xhr.onreadystatechange = function() {
+  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+    // console.log(xhr.responseText);
+  }
+};
+console.log(params);
+xhr.send(params);
+
+// const xhr = new XMLHttpRequest();
+// xhr.open('POST', '../../App/http/controllers/order/add_order.php');
+// xhr.setRequestHeader('Content-Type', 'application/json');
+// console.log(JSON.stringify(data));
+// xhr.send(JSON.stringify(data));
+
+// const jsonData = JSON.stringify(data); 
+
+// console.log('JSON data:', jsonData);
+// xhr.send(JSON.stringify(data));   
+// xhr.send("hhh");   
+
+
+// xhr.onreadystatechange = function() {
+//   if (this.readyState == 4 && this.status == 200) {
+//     console.log(this.responseText);
+//     const response = JSON.parse(this.responseText);
+//     // $json_data = json_encode(this.responseText);
+//     // console.log($json_data);
+//     if (this.responseText.status == "success") {
+//       console.log(this.responseText.status);
+//       alert("Order added successfully");
+//       window.location.reload();
+//     } else {
+//       console.log(this.responseText.status);
+//       alert("Error adding order");
+//     }
+//   }
+// };
 });
 
 </script>

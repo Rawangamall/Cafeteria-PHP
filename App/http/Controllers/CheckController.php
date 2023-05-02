@@ -4,8 +4,8 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-include("/opt/lampp/htdocs/cafeteria/App/models/user_model.php");
+// include("Core/dbConnection.php");
+include("C:/xampp/htdocs/php/ITI-Cafeteria/App/models/user_model.php");
 
     $user=new User();
     $allusers= $user->selectAll();

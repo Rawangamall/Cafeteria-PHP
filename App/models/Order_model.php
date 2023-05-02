@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// include("Core/dbConnection.php");
+include("Core/dbConnection.php");
 
 class Order{
 
@@ -12,10 +12,10 @@ class Order{
 
 function insertOrder($note,$amount,$userID){
        
-    $conn= $this->connectDb();
+    $conn= connectDb();
    
     // prepare sql and bind parameters
-    $stmt = $conn->prepare("INSERT INTO orders (note,amount,userID) 
+    $stmt = $conn->prepare("INSERT INTO order (note,amount,userID) 
     VALUES (:note, :amount, :userID)");
     $stmt->bindParam(':note', $note);
     $stmt->bindParam(':amount', $amount);
