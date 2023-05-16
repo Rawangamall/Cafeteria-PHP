@@ -146,6 +146,11 @@ if (xhr.status === 200) {
     // Add event listener to the button
     var buttonElement = nameCell.querySelector('.userbtn');
     buttonElement.addEventListener('click', function() {
+      var iconElement = this.querySelector('i');
+    if (iconElement.classList.contains('fa-plus')) {
+      iconElement.classList.remove('fa-plus');
+      iconElement.classList.add('fa-minus');
+
         var BtnuserId = this.getAttribute('data-userid');
         console.log('Button clicked with user ID:', BtnuserId);
         var xhr2 = new XMLHttpRequest();
@@ -153,7 +158,6 @@ if (xhr.status === 200) {
         xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr2.onload = function() {
             if (xhr2.status === 200) {
-           //   console.log(xhr2.responseText);
         var orders = JSON.parse(xhr2.responseText); 
         document.getElementById("userOrders").style.visibility =" visible";
         var tbody = document.getElementById("displayorders");
@@ -169,8 +173,13 @@ if (xhr.status === 200) {
 
   var buttonElement2 = dateCell.querySelector('.orderbtn');
           buttonElement2.addEventListener('click', function() {
+            var iconElement = this.querySelector('i');
+    if (iconElement.classList.contains('fa-plus')) {
+      iconElement.classList.remove('fa-plus');
+      iconElement.classList.add('fa-minus');
+
             var BtnorderId = this.getAttribute('data-orderid');
-            console.log('Button clicked with order ID:', BtnorderId);
+        //    console.log('Button clicked with order ID:', BtnorderId);
 
             // Send a request to get the details of the order
             var xhr3 = new XMLHttpRequest();
@@ -179,7 +188,6 @@ if (xhr.status === 200) {
             xhr3.onload = function() {
               if (xhr3.status === 200) {
                 var orderDetails = JSON.parse(xhr3.responseText);
-                  console.log(orderDetails);
                 document.getElementById("orderproducts").style.visibility =" visible";
         var tbody = document.getElementById("displayproducts");
     tbody.innerHTML = ""; // Clear existing rows
@@ -200,12 +208,24 @@ if (xhr.status === 200) {
             };
           }
             xhr3.send('BtnorderId=' + BtnorderId);
+          } else {
+      iconElement.classList.remove('fa-minus');
+      iconElement.classList.add('fa-plus');
+      document.getElementById("orderproducts").style.visibility ="hidden";
+    }
           
           });
 };
             }
         };
-        xhr2.send('BtnuserId=' + BtnuserId);
+      xhr2.send('BtnuserId=' + BtnuserId);
+      } else {
+      iconElement.classList.remove('fa-minus');
+      iconElement.classList.add('fa-plus');
+      document.getElementById("userOrders").style.visibility ="hidden";
+      document.getElementById("orderproducts").style.visibility ="hidden";
+      }
+
     });
 }
 
@@ -221,6 +241,11 @@ if (xhr.status === 200) {
   var UserBtns = document.querySelectorAll(".userbtn");
    UserBtns.forEach(function(UserBtn) {
   UserBtn.addEventListener("click", function() {
+    var iconElement = this.querySelector('i');
+    if (iconElement.classList.contains('fa-plus')) {
+      iconElement.classList.remove('fa-plus');
+      iconElement.classList.add('fa-minus');
+
     var BtnuserId = UserBtn.getAttribute("data-userid");
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "../../App/http/Controllers/CheckController.php");
@@ -242,6 +267,11 @@ if (xhr.status === 200) {
   amountCell.textContent = order[5];
   var buttonElement2 = dateCell.querySelector('.orderbtn');
           buttonElement2.addEventListener('click', function() {
+            var iconElement = this.querySelector('i');
+    if (iconElement.classList.contains('fa-plus')) {
+      iconElement.classList.remove('fa-plus');
+      iconElement.classList.add('fa-minus');
+
             var BtnorderId = this.getAttribute('data-orderid');
             console.log('Button clicked with order ID:', BtnorderId);
 
@@ -273,12 +303,23 @@ if (xhr.status === 200) {
             };
           }
             xhr3.send('BtnorderId=' + BtnorderId);
+          } else {
+      iconElement.classList.remove('fa-minus');
+      iconElement.classList.add('fa-plus');
+      document.getElementById("orderproducts").style.visibility ="hidden";
+    }
           
           });
 }
       }
     };
     xhr.send("BtnuserId=" + BtnuserId);
+  } else {
+      iconElement.classList.remove('fa-minus');
+      iconElement.classList.add('fa-plus');
+      document.getElementById("userOrders").style.visibility ="hidden";
+      document.getElementById("orderproducts").style.visibility ="hidden";
+      }
   });
 });
 

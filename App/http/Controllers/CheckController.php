@@ -14,6 +14,7 @@ include("/opt/lampp/htdocs/cafeteria/App/models/Product_model.php");
     $allusers= $user->selectAll();
     $usersamount= $user->totalamount();
 
+
     if (isset($_POST['userId']) && $_POST['userId'] != "") {
         $userId = $_POST['userId'];
         $Usertotal= $user->Usertotalamount($userId);
