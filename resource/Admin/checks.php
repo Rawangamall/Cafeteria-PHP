@@ -37,11 +37,14 @@ include("../../App/http/Controllers/CheckController.php");
         <!------------------------------ main page ------------------------->
 
 <div class="form-group col-lg-6" style="display:flex;" >
-<form action="" method="">
-<label for="from-date">FROM</label>
-<input placeholder="Select date" type="date" id="from-date" name="Fromdate" class="form-control" style="display:inline-block;">
-<label for="from-date">&nbsp;&nbsp;TO</label>
-  <input placeholder="Select date" type="date" id="from-date" name="Todate" class="form-control" style="display:inline-block;">
+
+<form id="date-form">
+  <label for="from-date">FROM</label>
+  <input placeholder="Select date" type="date" id="from-date" name="Fromdate" class="form-control" style="display:inline-block;">
+  <label for="to-date">&nbsp;&nbsp;TO</label>
+  <input placeholder="Select date" type="date" id="to-date" name="Todate" class="form-control" style="display:inline-block;">
+</form>
+
 </div>
 
 <div class="form-group col-lg-6" style="margin-top:8px;">
@@ -52,7 +55,6 @@ include("../../App/http/Controllers/CheckController.php");
                       <?php }?>
                     </select>
                   </div>
-                      </form>
 
         <!-- --------------------------------------------------------------- -->
 
@@ -117,6 +119,32 @@ include("../../App/http/Controllers/CheckController.php");
 </div>
 
 <script>
+document.getElementById("date-form").addEventListener("change", function(event) {
+  event.preventDefault();
+
+  var fromDate = document.getElementById("from-date").value;
+  var toDate = document.getElementById("to-date").value;
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '../../App/http/Controllers/CheckController.php');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+  var data = 'fromDate=' + encodeURIComponent(fromDate) + '&toDate=' + encodeURIComponent(toDate);
+console.log(data);
+  xhr.onload = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+         console.log(xhr.responseText);
+       var orders = JSON.parse(xhr.responseText);
+       console.log(orders);
+    } else {
+      console.error('Request failed. Status:', xhr.status);
+    }
+  };
+
+  xhr.send(data);
+});
+
+
   document.addEventListener('DOMContentLoaded', function() {
     var dropdown = document.getElementById('user-dropdown');
         dropdown.addEventListener('change', function() {
@@ -254,6 +282,7 @@ if (xhr.status === 200) {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         console.log(xhr.responseText);
         var orders = JSON.parse(xhr.responseText);
+     //   console.log(orders);
      document.getElementById("userOrders").style.visibility =" visible";
     var tbody = document.getElementById("displayorders");
     tbody.innerHTML = ""; // Clear existing rows
