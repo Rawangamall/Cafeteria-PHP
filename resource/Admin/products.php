@@ -1,5 +1,6 @@
 <?php
-include("include/layouts/header.php")
+include("include/layouts/header.php");
+include("../../App/http/controllers/Product/allProducts.php");
 ?>
 
 <!-- Begin Page Content -->
@@ -33,21 +34,22 @@ include("include/layouts/header.php")
                                 </thead>
                                 <tbody>
                                 <?php
-                                include "include/connection.php";
+                                // include "../../App/models/core/dbConnection.php";
                                 // select data from database
-                                $sql = "SELECT p.id, p.name, p.price, p.availability, c.name as category, p.image FROM product p INNER JOIN category c ON p.categoryID = c.id";
-                                $result = $db->query($sql);
+                                // $sql = "SELECT p.id, p.name, p.price, p.availability, c.name as category, p.image FROM product p INNER JOIN category c ON p.categoryID = c.id";
+                                // $result = $db->query($sql);
 
                                 // loop through results and display data in table
-                                if ($result->rowCount() > 0) {
-                                    foreach ($result as $row) {
+                                if ($allProducts) {
+                                    foreach ($allProducts as $row) {
                                         echo "<tr>";
                                         echo "<td>" . $row["id"] . "</td>";
                                         echo "<td>" . $row["name"] . "</td>";
                                         echo "<td>" . $row["price"] . "</td>";
                                         echo "<td>" . $row["availability"] . "</td>";
-                                        echo "<td>" . $row["category"] . "</td>";
-                                        echo "<td><img src='uploads/product/" . $row["image"] . "' width='100' height='100'></td>";
+                                        echo "<td>" . $row["Cname"] . "</td>";
+                                        // echo "<td><img src='uploads/product/" . $row["image"] . "' width='100' height='100'></td>";
+                                        echo "<td><img src='" . $row["image"] . "' width='100' height='100'></td>";
                                         echo '<td><a class="btn btn-info" href="updateProduct.php?id=' . $row["id"] . '">Update</a> | <a class="btn btn-danger" href="deleteProduct.php?id=' . $row["id"] . '">Delete</a></td>';
                                         echo "</tr>";
 
