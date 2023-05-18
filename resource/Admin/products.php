@@ -33,7 +33,10 @@ include("include/layouts/header.php")
                                 </thead>
                                 <tbody>
                                 <?php
-                                include "include/connection.php";
+                                // include "include/connection.php";
+                                include("../../App/models/Core/dbConnection.php");
+                                $db = connectDb(); 
+
                                 // select data from database
                                 $sql = "SELECT p.id, p.name, p.price, p.availability, c.name as category, p.image FROM product p INNER JOIN category c ON p.categoryID = c.id";
                                 $result = $db->query($sql);

@@ -4,7 +4,9 @@
 
 
 
-include "include/connection.php";
+// include "include/connection.php";
+include("../../App/models/Core/dbConnection.php");
+$db = connectDb(); 
 include "include/function/function.php";
 
 

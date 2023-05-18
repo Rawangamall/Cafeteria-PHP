@@ -14,7 +14,9 @@ if(isset($_POST['name'])){
         exit;
     } 
     else {
-        include "../connection.php";
+        // include "../connection.php";
+        include("../../../../App/models/Core/dbConnection.php");
+        $db = connectDb(); 
 
         $query = "INSERT INTO category(name) VALUES (:name)";
         $stmt = $db->prepare($query);

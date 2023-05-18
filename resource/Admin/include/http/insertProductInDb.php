@@ -44,7 +44,9 @@ if(isset($_POST['name']) &&
         $pic = $desired_name . "." . $file_ext;
         move_uploaded_file($file_tmp, "../../uploads/product/" . $pic);
 
-        include "../connection.php";
+        // include "../connection.php";
+        include("../../../../App/models/Core/dbConnection.php");
+        $db = connectDb(); 
 
         $query = "INSERT INTO product(name, price, image, categoryID) VALUES(:name, :price, :image, :categoryID)";
         $stmt = $db->prepare($query);

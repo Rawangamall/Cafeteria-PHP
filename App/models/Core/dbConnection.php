@@ -20,3 +20,15 @@ function connectDb(){
 }
 ?>
 
+<!-- // Check if the function exists before declaring it
+if (!function_exists('connectDb')) {
+    function connectDb() {
+        try {
+            $db = new PDO('mysql:dbname=cafeteria;host=127.0.0.1;port=3306;', 'root', '');
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $db;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+} -->
