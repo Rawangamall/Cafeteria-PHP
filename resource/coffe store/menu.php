@@ -355,7 +355,7 @@ include("../../App/http/controllers/Category/allCategories.php");
         <div class="cart-bar">
             <h4 class="cart-bar__title">Cart Items - <span>4</span></h4>
             <div class="cart-bar__lists">
-                <div class="cart-bar__item position-relative d-flex">
+                <!-- <div class="cart-bar__item position-relative d-flex">
                     <div class="thumb">
                         <img src="assets/images/top-grade/tg-1.png" alt="image_not_found">
                     </div>
@@ -366,7 +366,7 @@ include("../../App/http/controllers/Category/allCategories.php");
                         <span class="price">$19.00</span>
                         <a href="#0" class="remove"><i class="fal fa-times"></i></a>
                     </div>
-                </div>
+                </div> -->
                 
                 
                 
@@ -439,6 +439,7 @@ include("../../App/http/controllers/Category/allCategories.php");
                         </div>
                     </div>
                 </div>
+                
                 <div id="popular-menu-grid-2" class="row popular-menu__grid popular-menu__lists mt-none-30">
                     <div class="col-xl-6 col-lg-6 col-md-6 l-item grid-sizer"></div>
                     <?php
@@ -560,12 +561,93 @@ include("../../App/http/controllers/Category/allCategories.php");
     </footer>
 
     <!--========= JS Here =========-->
+
+<script> 
+
+const  productElements = document.querySelectorAll('.popular-menu__list');
+productElements.forEach((productElement) => {
+    console.log(productElement);
+  productElement.addEventListener('click',handleClick ); }); 
+    // Retrieve the product data from the clicked element
+
+    function handleClick() {
+    console.log(this);
+    productElement=this;
+    const productId = productElement.dataset.productId;
+    const productName = productElement.querySelector('.title a').textContent;
+    const productPrice = productElement.querySelector('.price').textContent;
+    const productImage = productElement.querySelector('.thumb img').src;
+    console.log("hiiii")
+    console.log('Product clicked:', productId, productName, productPrice, productImage);
+
+    // Update the cart with the product data
+    updateCart(productId, productName, productPrice, productImage);
+ 
+    }
+    function updateCart(productId, productName, productPrice,productImage) {
+  const cartBar = document.querySelector('.cart-bar__lists');
+
+  // Check if the product is already in the cart
+  const existingCartItem = cartBar.querySelector(`[data-product-id="${productId}"]`);
+  if (existingCartItem) {
+    // If the product is already in the cart, increase its quantity
+    const quantityElement = existingCartItem.querySelector('.quantity');
+    quantityElement.textContent = parseInt(quantityElement.textContent) + 1;
+  } else {
+    // If the product is not in the cart, create a new cart item element
+    const cartItemElement = document.createElement('div');
+    cartItemElement.classList.add('cart-bar__item', 'position-relative', 'd-flex');
+    cartItemElement.setAttribute('data-product-id', productId);
+    cartItemElement.innerHTML = `
+     
+      <div class="content">
+        <h4 class="title">
+          <a href="product-details.html">${productName}</a>
+        </h4>
+        <span class="price">${productPrice}</span>
+        <div class="quantity">1</div>
+        <a href="#0" class="remove"><i class="fal fa-times"></i></a>
+      </div>
+    `;
+    console.log(cartItemElement);
+    cartBar.appendChild(cartItemElement);
+  }
+
+  // Update the cart subtotal
+  updateCartSubtotal();
+}
+function updateCartSubtotal() {
     
-    <!-- <script>
+  const cartBar = document.querySelector('.cart-bar');
+  const cartItems = cartBar.querySelectorAll('.cart-bar__item');
+  console.log(cartBar, cartItems);
+  let subtotal = 0;
+  cartItems.forEach((cartItem) => {
+    console.log(cartItem);
+    const priceElement = cartItem.querySelector('.price');
+    console.log(priceElement);
+    const quantityElement = cartItem.querySelector('.quantity');
+    const price = parseFloat(priceElement.textContent.replace('EGP', ''));
+    const quantity = parseInt(quantityElement.textContent);
+    subtotal += price * quantity;
+  });
+
+  const subtotalElement = cartBar.querySelector('.cart-bar__subtotal span:last-child');
+  subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+  console.log("hiiiicartbar");
+
+}
+
+
+</script>
+
+    <!-- <script >
        
 
-
-
+// window.onload= function(){
+ 
+console.log('hello');
+  // Add event listener for all product elements
 const  productElements = document.querySelectorAll('.popular-menu__list');
 productElements.forEach((productElement) => {
     console.log(productElement);
@@ -601,12 +683,12 @@ productElements.forEach((productElement) => {
     cartItemElement.setAttribute('data-product-id', productId);
     cartItemElement.innerHTML = `
       <div class="thumb">
-      <?php
+      
       if($productImage!="")
         {
             ?>
         <img src="../Admin/${productImage}" alt="">
-        <?php } ?>
+        
       </div>
       <div class="content">
         <h4 class="title">
@@ -643,24 +725,31 @@ function updateCartSubtotal() {
 
 
 
-        </script> -->
+        </script>  -->
     <script src="assets/js/jquery-2.2.4.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="assets/js/bootstrap.bundle.min.js"></script> -->
     <script src="assets/js/jquery.meanmenu.min.js"></script>
-    <script src="assets/js/jquery.nice-select.min.js"></script>
+    <!-- <script src="assets/js/jquery.nice-select.min.js"></script> -->
     <script src="assets/js/lightcase.js"></script>
     <script src="assets/js/owl.carousel.min.js"></script>
     <script src="assets/js/tilt.jquery.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/jquery.easing.min.js"></script>
-    <script src="assets/js/scrollwatch.js"></script>
-    <script src="assets/js/sticky-header.js"></script>
-    <script src="assets/js/waypoint.js"></script>
+    <!-- <script src="assets/js/jquery.easing.min.js"></script> -->
+    <!-- <script src="assets/js/scrollwatch.js"></script> -->
+    <!-- <script src="assets/js/sticky-header.js"></script> -->
+    <!-- <script src="assets/js/waypoint.js"></script> -->
     <script src="assets/js/imagesloaded.pkgd.min.js"></script>
     <script src="assets/js/isotope.pkgd.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfpGBFn5yRPvJrvAKoGIdj1O1aO9QisgQ"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfpGBFn5yRPvJrvAKoGIdj1O1aO9QisgQ"></script> -->
     <script src="assets/js/jquery-ui-slider-range.js"></script>
     <script src="assets/js/main.js"></script>
+   <script type="text/javascript">
+       
+
+// window.onload= function(){
+ 
+
+   
 </body>
 
 
