@@ -35,7 +35,6 @@ include("/opt/lampp/htdocs/cafeteria/App/models/Product_model.php");
 
               header('Content-Type: application/json');
               echo json_encode($userOrders); 
-            
      }
       
      else if(isset($_POST['BtnuserId'])&& ($_POST['fromDate'] == "" || $_POST['toDate'] == "")) {
