@@ -49,11 +49,12 @@ include("../../App/http/controllers/order/manual_oder.php");
           <div class="card-group">
             <?php $productArray = json_decode('[' . $row["products"] . ']', true);
                   foreach ($productArray as $product) {
-   
+                    
   ?>
               <div class="card col-2" style="width: 10rem;">
-                <img src="assets/img/pepsi2.png" class="card-img-top" style="max-width: 120px;"alt="Product Image">
-                <div class="card-body">
+              <!-- <img src='uploads/product/" . $row["image"] . "' width='100' height='100'> -->
+                  
+              <img src='uploads/product/<?php echo $product['image']; ?>' class="card-img-top" style="width: 155px;height:180px" alt="Product Image">                <div class="card-body">
                   <h5 class="card-title"><?php echo $product['name']?></h5>
                   <p class="card-text"><?php echo $product['quantity'];?></p>
                 </div>

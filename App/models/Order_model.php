@@ -128,8 +128,8 @@ function selectALLOrders($fromdate , $todate){
   JOIN order_product op ON op.order_id = o.id 
   JOIN product p ON p.id = op.product_id 
   WHERE o.status = 'processing'
-  AND o.date >= CONCAT(:fromdate, ' 00:00:00')
-    AND o.date <= CONCAT(:todate, ' 23:59:59')
+  -- AND o.date >= CONCAT(:fromdate, ' 00:00:00')
+  --   AND o.date <= CONCAT(:todate, ' 23:59:59')
   GROUP BY o.id
   ORDER BY o.id");
 
@@ -139,6 +139,38 @@ function selectALLOrders($fromdate , $todate){
     $order= $stmt->fetchAll();
     return $order;
   }
+
+  function selectALLOrdersforDeliver(){
+
+    $conn = connectDb();
+    
+    $stmt = $conn->prepare("SELECT u.name,u.room,u.ext, 
+    o.*, 
+    GROUP_CONCAT(
+    JSON_OBJECT(
+      'name', p.name,
+      'price', p.price,
+      'image', p.image,
+      'quantity', op.quantity
+    )
+    ) AS products,
+    SUM(p.price * op.quantity) AS total_price
+    FROM `order` o 
+    JOIN `users` u ON o.userID = u.id 
+    JOIN order_product op ON op.order_id = o.id 
+    JOIN product p ON p.id = op.product_id 
+    WHERE o.status = 'processing'
+    -- AND o.date >= CONCAT(:fromdate, ' 00:00:00')
+    --   AND o.date <= CONCAT(:todate, ' 23:59:59')
+    GROUP BY o.id
+    ORDER BY o.id");
+  
+      // $stmt->bindParam(':fromdate', $fromdate);
+      // $stmt->bindParam(':todate', $todate);
+      $stmt->execute();
+      $order= $stmt->fetchAll();
+      return $order;
+    }
  }
 ?>
 
