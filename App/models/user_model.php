@@ -143,6 +143,18 @@ class User
        
         $conn = null;
     }
+
+    function selectUserOrdersFilter($id, $start, $end) {
+        $conn = connectDb();
+        $stmt = $conn->prepare("SELECT * FROM `order` o WHERE o.userID = :id AND o.date >= :start AND o.date <= :end");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':start', $start);
+        $stmt->bindParam(':end', $end);
+        $stmt->execute();
+        $userOrders = $stmt->fetchAll();
+        return $userOrders;
+    }
+    
     // function updateUser ($id, $name,$email,$password,$image,$room,$ext ){
     //     $conn=  $this->connectDb();
     //     $stmt = $conn->prepare("UPDATE users SET user_name=:name, user_email=:email, user_password=:password,

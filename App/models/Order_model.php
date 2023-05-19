@@ -108,12 +108,10 @@ function updateOrder($id,$status){
 
 
 
-function selectALLOrders(){
+function selectALLOrders($fromdate , $todate){
 
   $conn = connectDb();
   
- 
-
   $stmt = $conn->prepare("SELECT u.name,u.room,u.ext, 
   o.*, 
   GROUP_CONCAT(
@@ -130,9 +128,13 @@ function selectALLOrders(){
   JOIN order_product op ON op.order_id = o.id 
   JOIN product p ON p.id = op.product_id 
   WHERE o.status = 'processing'
+  AND o.date >= CONCAT(:fromdate, ' 00:00:00')
+    AND o.date <= CONCAT(:todate, ' 23:59:59')
   GROUP BY o.id
   ORDER BY o.id");
-    
+
+    $stmt->bindParam(':fromdate', $fromdate);
+    $stmt->bindParam(':todate', $todate);
     $stmt->execute();
     $order= $stmt->fetchAll();
     return $order;

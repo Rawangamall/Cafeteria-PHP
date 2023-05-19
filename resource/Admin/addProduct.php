@@ -1,7 +1,9 @@
 <?php
 include("include/layouts/header.php");
 
-include "include/connection.php";
+// include "include/connection.php";
+include("../../App/models/Core/dbConnection.php");
+$db = connectDb(); 
 // Fetch the categories from the database
 $sql = "SELECT * FROM category";
 $result = $db->query($sql);

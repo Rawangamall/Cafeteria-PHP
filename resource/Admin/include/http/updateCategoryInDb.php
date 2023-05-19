@@ -1,6 +1,8 @@
 <?php
 
-include_once "../connection.php";
+include("../../../../App/models/Core/dbConnection.php");
+$db = connectDb(); 
+// include_once "../connection.php";
 include_once "../function/function.php";
 
 if(isset($_POST['submit'])) {

@@ -22,7 +22,6 @@
         rel="stylesheet">
     <title>PHP PROJECT</title>
 <link rel="stylesheet" href="sb-admin-2.css">
-<link rel="stylesheet" href="../../sb-admin-2.css">
 
 </head>
 

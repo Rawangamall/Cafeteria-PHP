@@ -28,7 +28,9 @@ include("include/layouts/header.php")
                 </thead>
                 <tbody>
                 <?php
-                    include "include/connection.php";
+                    // include "include/connection.php";
+                    include("../../App/models/Core/dbConnection.php");
+                    $db = connectDb(); 
                     // select data from database
                     $sql = "SELECT * FROM category";
                     $result = $db->query($sql);

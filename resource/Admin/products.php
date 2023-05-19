@@ -34,6 +34,10 @@ include("../../App/http/controllers/Product/allProducts.php");
                                 </thead>
                                 <tbody>
                                 <?php
+                                // include "include/connection.php";
+                                include("../../App/models/Core/dbConnection.php");
+                                $db = connectDb(); 
+
                                 // include "../../App/models/core/dbConnection.php";
                                 // select data from database
                                 // $sql = "SELECT p.id, p.name, p.price, p.availability, c.name as category, p.image FROM product p INNER JOIN category c ON p.categoryID = c.id";
@@ -48,8 +52,8 @@ include("../../App/http/controllers/Product/allProducts.php");
                                         echo "<td>" . $row["price"] . "</td>";
                                         echo "<td>" . $row["availability"] . "</td>";
                                         echo "<td>" . $row["Cname"] . "</td>";
-                                        // echo "<td><img src='uploads/product/" . $row["image"] . "' width='100' height='100'></td>";
-                                        echo "<td><img src='" . $row["image"] . "' width='100' height='100'></td>";
+                                        echo "<td><img src='uploads/product/" . $row["image"] . "' width='100' height='100'></td>";
+                                        // echo "<td><img src='" . $row["image"] . "' width='100' height='100'></td>";
                                         echo '<td><a class="btn btn-info" href="updateProduct.php?id=' . $row["id"] . '">Update</a> | <a class="btn btn-danger" href="deleteProduct.php?id=' . $row["id"] . '">Delete</a></td>';
                                         echo "</tr>";
 

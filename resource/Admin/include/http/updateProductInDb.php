@@ -1,5 +1,7 @@
 <?php 
-include "../connection.php";
+// include "../connection.php";
+include("../../../../App/models/Core/dbConnection.php");
+$db = connectDb(); 
 
 include "../function/function.php";
 
