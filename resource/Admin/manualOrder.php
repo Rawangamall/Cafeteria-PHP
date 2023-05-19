@@ -75,7 +75,7 @@ include("../../App/http/controllers/order/manual_oder.php");
 document.querySelectorAll('.deliver-btn').forEach(function(button) {
   button.addEventListener('click', function() {
     var xhr = new XMLHttpRequest();
-    xhr.ope./n('POST', '.../App/http/controllers/order/update_order_status.php');
+    xhr.open('POST', '../../App/http/controllers/order/update_order_status.php');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {
       if (xhr.status === 200) {

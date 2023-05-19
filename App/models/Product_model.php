@@ -3,6 +3,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+include("Core/dbConnection.php");
 
 
 class Product{
@@ -13,7 +14,7 @@ class Product{
         $conn = connectDb();
         
       
-        $stmt = $conn->prepare("SELECT DISTINCT id, name, image , price FROM product");
+        $stmt = $conn->prepare("SELECT p.*, c.name as Cname FROM product p JOIN category c ON p.CategoryID = c.id ");
           
           $stmt->execute();
           $order= $stmt->fetchAll();
