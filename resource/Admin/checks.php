@@ -119,150 +119,163 @@ include("../../App/http/Controllers/CheckController.php");
 </div>
 
 <script>
-document.getElementById("date-form").addEventListener("change", function(event) {
-  event.preventDefault();
+// function sendDatesToController(fromDate, toDate , user_id) {
+//   var xhr = new XMLHttpRequest();
+//   xhr.open('POST', '../../App/http/Controllers/CheckController.php');
+//   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//   xhr.onload = function() {
+//     if (xhr.status === 200) {
+//       // Process the response
+//       console.log(xhr.responseText)
+//       var orders = JSON.parse(xhr.responseText);
+//        console.log(orders);
+//     } else {
+//       console.error('Request failed. Status:', xhr.status);
+//     }
+    
+//   };
+//   // Create the payload with the selected dates
+//   var data = 'fromDate=' + fromDate + '&toDate=' + toDate + '&user_id=' + user_id;
+//   // Send the request
+//   console.log('User ID:', user_id);
 
-  var fromDate = document.getElementById("from-date").value;
-  var toDate = document.getElementById("to-date").value;
+//   xhr.send(data);
+// }
 
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '../../App/http/Controllers/CheckController.php');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-  var data = 'fromDate=' + encodeURIComponent(fromDate) + '&toDate=' + encodeURIComponent(toDate);
-console.log(data);
-  xhr.onload = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-         console.log(xhr.responseText);
-       var orders = JSON.parse(xhr.responseText);
-       console.log(orders);
-    } else {
-      console.error('Request failed. Status:', xhr.status);
-    }
-  };
-
-  xhr.send(data);
-});
+document.addEventListener('DOMContentLoaded', function() {
+  var dropdown = document.getElementById('user-dropdown');
+  dropdown.addEventListener('change', function() {
+    var userId = this.value;
 
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var dropdown = document.getElementById('user-dropdown');
-        dropdown.addEventListener('change', function() {
-      
-      var userId = this.value;
-      var xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     xhr.open('POST', '../../App/http/Controllers/CheckController.php');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {
+      if (xhr.status === 200) {
+        var fromDateElement = document.getElementById('from-date');
+    var toDateElement = document.getElementById('to-date');
+    var originalFromDate = ""; 
+    var originalToDate = "";
 
-if (xhr.status === 200) {
-    var user = JSON.parse(xhr.responseText);
-    document.getElementById("oneuser").style.visibility =" visible";
-    document.getElementById("alluser").style.display = "none";
+    
+    // Check if the dates have been changed
+    if (fromDateElement.value !== '') {
+      originalFromDate = fromDateElement.value;
+    }
+    if (toDateElement.value !== '') {
+      originalToDate = toDateElement.value;
+    }
+        var user = JSON.parse(xhr.responseText);
+        document.getElementById("oneuser").style.visibility = "visible";
+        document.getElementById("alluser").style.display = "none";
 
-    var tbody = document.getElementById("displayuser");
-    tbody.innerHTML = ""; // Clear existing rows
+        var tbody = document.getElementById("displayuser");
+        tbody.innerHTML = ""; // Clear existing rows
 
-    var row = tbody.insertRow(0);
-    var nameCell = row.insertCell(0);
-    var amountCell = row.insertCell(1);
+        var row = tbody.insertRow(0);
+        var nameCell = row.insertCell(0);
+        var amountCell = row.insertCell(1);
 
-    const button = '<button class="btn userbtn" data-userid="' + user[0]['id'] + '"><i class="fa fa-plus"></i></button>';
-    nameCell.innerHTML = user[0]['name'] + ' ' + button;
-    amountCell.textContent = user[0]['total_amount'];
+        const button = '<button class="btn userbtn" data-userid="' + user[0]['id'] + '"><i class="fa fa-plus"></i></button>';
+        nameCell.innerHTML = user[0]['name'] + ' ' + button;
+        amountCell.textContent = user[0]['total_amount'];
 
-    // Add event listener to the button
-    var buttonElement = nameCell.querySelector('.userbtn');
-    buttonElement.addEventListener('click', function() {
-      var iconElement = this.querySelector('i');
-    if (iconElement.classList.contains('fa-plus')) {
-      iconElement.classList.remove('fa-plus');
-      iconElement.classList.add('fa-minus');
+        // Add event listener to the button
+        var buttonElement = nameCell.querySelector('.userbtn');
+        buttonElement.addEventListener('click', function() {
+          var iconElement = this.querySelector('i');
+          if (iconElement.classList.contains('fa-plus')) {
+            iconElement.classList.remove('fa-plus');
+            iconElement.classList.add('fa-minus');
+            console.log(fromDateElement.value);
+            var user_id = user[0]['id'];
+            // sendDatesToController(fromDateElement.value, toDateElement.value ,user_id);
 
-        var BtnuserId = this.getAttribute('data-userid');
-        console.log('Button clicked with user ID:', BtnuserId);
-        var xhr2 = new XMLHttpRequest();
-        xhr2.open('POST', '../../App/http/Controllers/CheckController.php');
-        xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr2.onload = function() {
-            if (xhr2.status === 200) {
-        var orders = JSON.parse(xhr2.responseText); 
-        document.getElementById("userOrders").style.visibility =" visible";
-        var tbody = document.getElementById("displayorders");
-    tbody.innerHTML = ""; // Clear existing rows
-    for (var i = 0; i < orders.length; i++) {
-  var order = orders[i];
-  var row = tbody.insertRow(i);
-  var dateCell = row.insertCell(0);
-  var amountCell = row.insertCell(1);
-  const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
-  dateCell.innerHTML = order[3] + ' ' + button; 
-  amountCell.textContent = order[5];
+            var BtnuserId = this.getAttribute('data-userid');
 
-  var buttonElement2 = dateCell.querySelector('.orderbtn');
-          buttonElement2.addEventListener('click', function() {
-            var iconElement = this.querySelector('i');
-    if (iconElement.classList.contains('fa-plus')) {
-      iconElement.classList.remove('fa-plus');
-      iconElement.classList.add('fa-minus');
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open('POST', '../../App/http/Controllers/CheckController.php');
+            xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr2.onload = function() {
+              if (xhr2.status === 200) {
+                var orders = JSON.parse(xhr2.responseText);
+                document.getElementById("userOrders").style.visibility = "visible";
+                var tbody = document.getElementById("displayorders");
+                tbody.innerHTML = ""; // Clear existing rows
+                for (var i = 0; i < orders.length; i++) {
+                  var order = orders[i];
+                  var row = tbody.insertRow(i);
+                  var dateCell = row.insertCell(0);
+                  var amountCell = row.insertCell(1);
+                  const button = '<button class="btn orderbtn" data-orderid="' + order[0] + '"><i class="fa fa-plus"></i></button>';
+                  dateCell.innerHTML = order[3] + ' ' + button;
+                  amountCell.textContent = order[5];
 
-            var BtnorderId = this.getAttribute('data-orderid');
-        //    console.log('Button clicked with order ID:', BtnorderId);
+                  var buttonElement2 = dateCell.querySelector('.orderbtn');
+                  buttonElement2.addEventListener('click', function() {
+                    var iconElement = this.querySelector('i');
+                    if (iconElement.classList.contains('fa-plus')) {
+                      iconElement.classList.remove('fa-plus');
+                      iconElement.classList.add('fa-minus');
 
-            // Send a request to get the details of the order
-            var xhr3 = new XMLHttpRequest();
-            xhr3.open('POST', '../../App/http/Controllers/CheckController.php');
-            xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr3.onload = function() {
-              if (xhr3.status === 200) {
-                var orderDetails = JSON.parse(xhr3.responseText);
-                document.getElementById("orderproducts").style.visibility =" visible";
-        var tbody = document.getElementById("displayproducts");
-    tbody.innerHTML = ""; // Clear existing rows
-    for (var i = 0; i < orderDetails.length; i++) {
-  var order = orderDetails[i];
-  var row = tbody.insertRow(i);
+                      var BtnorderId = this.getAttribute('data-orderid');
+                      //    console.log('Button clicked with order ID:', BtnorderId);
 
-  var nameCell = row.insertCell(0);
-  var quantityCell = row.insertCell(1);
-  var imageCell = row.insertCell(2);
+                      // Send a request to get the details of the order
+                      var xhr3 = new XMLHttpRequest();
+                      xhr3.open('POST', '../../App/http/Controllers/CheckController.php');
+                      xhr3.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                      xhr3.onload = function() {
+                        if (xhr3.status === 200) {
+                          var orderDetails = JSON.parse(xhr3.responseText);
+                          document.getElementById("orderproducts").style.visibility = "visible";
+                          var tbody = document.getElementById("displayproducts");
+                          tbody.innerHTML = ""; // Clear existing rows
+                          for (var i = 0; i < orderDetails.length; i++) {
+                            var order = orderDetails[i];
+                            var row = tbody.insertRow(i);
 
-  nameCell.textContent = order[0] ;
-  const img = '<img src="assets/img/'+order[1]+'" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
-  imageCell.innerHTML = img;
-  quantityCell.textContent = order[2];
+                            var nameCell = row.insertCell(0);
+                            var quantityCell = row.insertCell(1);
+                            var imageCell = row.insertCell(2);
 
+                            nameCell.textContent = order[0];
+                            const img = '<img src="assets/img/' + order[1] + '" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
+                            imageCell.innerHTML = img;
+                            quantityCell.textContent = order[2];
+                          }
+                        }
+                      };
+                      xhr3.send('BtnorderId=' + BtnorderId);
+                    } else {
+                      iconElement.classList.remove('fa-minus');
+                      iconElement.classList.add('fa-plus');
+                      document.getElementById("orderproducts").style.visibility = "hidden";
+                    }
+                  });
+                };
               }
             };
-          }
-            xhr3.send('BtnorderId=' + BtnorderId);
+       var data = 'fromDate=' + fromDateElement.value + '&toDate=' + toDateElement.value + '&BtnuserId=' + BtnuserId;
+       console.log(data)
+
+            xhr2.send(data);
           } else {
-      iconElement.classList.remove('fa-minus');
-      iconElement.classList.add('fa-plus');
-      document.getElementById("orderproducts").style.visibility ="hidden";
-    }
-          
-          });
-};
-            }
-        };
-      xhr2.send('BtnuserId=' + BtnuserId);
-      } else {
-      iconElement.classList.remove('fa-minus');
-      iconElement.classList.add('fa-plus');
-      document.getElementById("userOrders").style.visibility ="hidden";
-      document.getElementById("orderproducts").style.visibility ="hidden";
+            iconElement.classList.remove('fa-minus');
+            iconElement.classList.add('fa-plus');
+            document.getElementById("userOrders").style.visibility = "hidden";
+            document.getElementById("orderproducts").style.visibility = "hidden";
+          }
+
+        });
       }
-
-    });
-}
-
     };
     console.log('userId', userId);
     xhr.send('userId=' + userId);
-         });
-   });
-  
+  });
+});
+
   // ---------------------------orders-----------------------------------
 
 
@@ -273,13 +286,26 @@ if (xhr.status === 200) {
     if (iconElement.classList.contains('fa-plus')) {
       iconElement.classList.remove('fa-plus');
       iconElement.classList.add('fa-minus');
+      var fromDateElement = document.getElementById('from-date');
+    var toDateElement = document.getElementById('to-date');
+    var originalFromDate = ""; 
+    var originalToDate = "";
 
+    
+    // Check if the dates have been changed
+    if (fromDateElement.value !== '') {
+      originalFromDate = fromDateElement.value;
+    }
+    if (toDateElement.value !== '') {
+      originalToDate = toDateElement.value;
+    }
     var BtnuserId = UserBtn.getAttribute("data-userid");
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "../../App/http/Controllers/CheckController.php");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function() {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+
         console.log(xhr.responseText);
         var orders = JSON.parse(xhr.responseText);
      //   console.log(orders);
@@ -342,7 +368,9 @@ if (xhr.status === 200) {
 }
       }
     };
-    xhr.send("BtnuserId=" + BtnuserId);
+    var data = 'fromDate=' + fromDateElement.value + '&toDate=' + toDateElement.value + '&BtnuserId=' + BtnuserId;
+       console.log(data)
+    xhr.send(data);
   } else {
       iconElement.classList.remove('fa-minus');
       iconElement.classList.add('fa-plus');
