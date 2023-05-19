@@ -1,8 +1,6 @@
 <?php
 
-// require_once("../../../App/models/Order_model.php");
 include("C:/xampp/htdocs/php/ITI-Cafeteria/App/models/Order_model.php");
-// require_once("C:/xampp/htdocs/php/ITI-Cafeteria/App/models/Core/dbConnection.php");
 
 
 $order = new Order();

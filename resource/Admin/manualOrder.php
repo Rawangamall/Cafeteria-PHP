@@ -39,8 +39,11 @@ include("../../App/http/controllers/order/manual_oder.php");
         <td><?php echo $row['room'];?></td>
         <td><?php echo $row['ext'];?></td>
         <td>
-        <button class="btn btn-primary deliver-btn" data-order-id="<?php echo $row['id']; ?>">Deliver</button>
-  
+          <?php if($row['status'] == 'processing') : ?>
+        <button class="btn btn-primary success deliver-btn" data-order-id="<?php echo $row['id']; ?>">Deliver</button>
+  <?php else : ?>
+    <button class="btn btn-success deliver-btn" data-order-id="<?php echo $row['id']; ?>" disabled>Out For Delivery</button>
+ <?php endif; ?>
   </td>
       </tr>
       

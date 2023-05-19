@@ -218,7 +218,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             var imageCell = row.insertCell(2);
 
                             nameCell.textContent = order[0];
-                            const img = '<img src="assets/img/' + order[1] + '" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
+
+                            const img = '<img src="uploads/product/' + order[1] + '" class="card-img-top" style="width: 120px; height: 120px; "alt="Product Image">'
                             imageCell.innerHTML = img;
                             quantityCell.textContent = order[2];
                           }
@@ -327,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var imageCell = row.insertCell(2);
 
   nameCell.textContent = order[0] ;
-  const img = '<img src="assets/img/'+order[1]+'" class="card-img-top" style="max-width: 120px;"alt="Product Image">'
+  const img = '<img src="uploads/product/'+order[1]+'" class="card-img-top" style="width: 120px ;height=150px;""alt="Product Image">'
   imageCell.innerHTML = img;
   quantityCell.textContent = order[2];
 

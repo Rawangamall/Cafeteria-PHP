@@ -102,7 +102,7 @@ include("../../App/http/controllers/order/admin_making_order.php");
                         ?>
                         <div class="col-md-3 card text-center border border-0 filteredProducts">
                             <div class="card-body p-2 productId" id="<?php echo $product["id"]; ?>">
-                                <img src='uploads/product/<?php echo $product['image']; ?>' alt="<?php echo $alt; ?>" data-bs-toggle="collapse" data-bs-target="#paragraph" width='100' height='100'>
+                            <img src='uploads/product/<?php echo $product['image']; ?>' alt="<?php echo $alt; ?>" data-bs-toggle="collapse" data-bs-target="#paragraph" width='130' height='140' style='border-radius: 3%;'>
                                 <p class="fw-bold text-uppercase text-center productName "><?php echo $product["name"]; ?></p>
                                 <p class="fw-bold text-uppercase text-center productPrice"><?php echo $product["price"]; ?></p>
                             </div>
@@ -198,6 +198,12 @@ function handleClick() {
         const price = parseFloat(priceTd.textContent);
         totalTd.textContent = (quantity * price).toFixed(2);
         calculateTotal();
+
+        if (quantity === 0) {
+            tbody.removeChild(tr);
+            productId.addEventListener("click", handleClick);
+            calculateTotal();
+        }
     });
 
     calculateTotal();
@@ -287,6 +293,7 @@ confirmButton.addEventListener("click", () => {
 });
 
 </script>
+
 
 <?php
 include "include/layouts/footer.php";

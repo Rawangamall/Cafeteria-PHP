@@ -29,73 +29,7 @@ function insertOrder($note,$amount,$userID){
 }
 
 
-// function insertProductOrder($order_id,$product_id,$amount_product){
-       
-//     $conn= $this->connectDb();
-   
-//     // prepare sql and bind parameters
-//     $stmt = $conn->prepare("INSERT INTO product_order (order_id,product_id,amount_product) 
-//     VALUES (:order_id, :product_id, :amount_product)");
-//     $stmt->bindParam(':order_id', $order_id);
-//     $stmt->bindParam(':product_id', $product_id);
-//     $stmt->bindParam(':amount_product', $amount_product);
-//     $stmt->execute();
-   
-//     $conn = null;
-   
-// }
 
-
-// function selectLatestOrder ($user_id){
-//     $conn=  $this->connectDb();
-    
-//     $stmt= $conn->prepare("SELECT products.product_name,products.product_image from products,product_order WHERE product_order.product_id=products.product_id AND product_order.order_id=(SELECT orders.order_id FROM orders WHERE orders.user_id=14 order BY orders.order_date_from DESC LIMIT 1);");
-//     $stmt->execute();
-//     $product = $stmt->fetchAll();
-//     return $product;
-  
-//     $conn = null;
-// }
-
-
-
-// function getId($product_name)
-// {
-
-//     $conn=  $this->connectDb();
-    
-//     $stmt= $conn->prepare("SELECT products.product_id from products WHERE products.product_name='$product_name' ;");
-//     $stmt->execute();
-//     $product_id = $stmt->fetch();
-//     return $product_id;
-   
-//     $conn = null;
-
-// }
-
-// function getPrice($product_name)
-// {
-
-//     $conn=  $this->connectDb();
-    
-//     $stmt= $conn->prepare("SELECT products.product_price from products WHERE products.product_name='$product_name' ;");
-//     $stmt->execute();
-//     $product_price = $stmt->fetch();
-//     return $product_price;
-   
-//     $conn = null;
-
-// }
-
-// function selectOrder($id,$dateFrom,$dateTo){
-//     $conn=  $this->connectDb();
-    
-//     $stmt= $conn->prepare("select * from products,orders,product_order where orders.order_id=product_order.order_id and products.product_id =product_order.product_id and '".$dateFrom."' <= orders.order_date_from and orders.order_date_from <=  '".$dateTo."' and orders.user_id='".$id."'
-//     ;");
-//     $stmt->execute();
-//     $order= $stmt->fetchAll();
-//     return $order;
-// }
 
 function updateOrder($id,$status){
   $conn= connectDb();
@@ -128,8 +62,8 @@ function selectALLOrders($fromdate , $todate){
   JOIN order_product op ON op.order_id = o.id 
   JOIN product p ON p.id = op.product_id 
   WHERE o.status = 'processing'
-  -- AND o.date >= CONCAT(:fromdate, ' 00:00:00')
-  --   AND o.date <= CONCAT(:todate, ' 23:59:59')
+  AND o.date >= CONCAT(:fromdate, ' 00:00:00')
+    AND o.date <= CONCAT(:todate, ' 23:59:59')
   GROUP BY o.id
   ORDER BY o.id");
 
@@ -159,14 +93,10 @@ function selectALLOrders($fromdate , $todate){
     JOIN `users` u ON o.userID = u.id 
     JOIN order_product op ON op.order_id = o.id 
     JOIN product p ON p.id = op.product_id 
-    WHERE o.status = 'processing'
-    -- AND o.date >= CONCAT(:fromdate, ' 00:00:00')
-    --   AND o.date <= CONCAT(:todate, ' 23:59:59')
+    -- WHERE o.status = 'processing'
     GROUP BY o.id
     ORDER BY o.id");
-  
-      // $stmt->bindParam(':fromdate', $fromdate);
-      // $stmt->bindParam(':todate', $todate);
+
       $stmt->execute();
       $order= $stmt->fetchAll();
       return $order;
