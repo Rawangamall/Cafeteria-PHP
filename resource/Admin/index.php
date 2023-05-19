@@ -47,7 +47,7 @@ include("../../App/http/controllers/order/admin_making_order.php");
                 <div class="form-group pt-3">
                     <label for="exampleDropdown">Room</label>
                     <div class="input-group">
-                        <select class="form-control" id="exampleDropdown" name="room">
+                        <select class="form-control" id="exampleDropdown" name="room" required>
                             <option>Select your room</option>
                            <?php foreach ($allRooms as $room) {
                                 echo '<option value="'.$room['id'].'">'.$room['room_name'].'</option>';
@@ -77,8 +77,7 @@ include("../../App/http/controllers/order/admin_making_order.php");
                     <div class="row">
                         <div class="col-md-6">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Search">
-                                <div class="input-group-append">
+                            <input type="text" class="form-control" placeholder="Search" id="searchInput">                                <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="button">
                                     <i class="fa fa-search"></i>
                                 </button>
@@ -88,7 +87,8 @@ include("../../App/http/controllers/order/admin_making_order.php");
                         <hr />
                         <div class="col-md-6">
                             <div class="input-group">
-                                <select class="form-control" id="dropdownMenuButton" name="user">
+                              
+                            <select class="form-control" id="dropdownMenuButton" name="user" required>
                                     <option>Select an user</option>
                                     <?php foreach ($allUsers as $user) {
                                         echo '<option value="'.$user['id'].'">'.$user['name'].'</option>';
@@ -111,8 +111,9 @@ include("../../App/http/controllers/order/admin_making_order.php");
                 </div>
             </div>
             <!-------------------------------------------------start row -->
-            <div class="row mt-4 px-3">
-                <div class="row">
+           
+            <div class="row mt-4 px-3" >
+                <div class="row col" >
                     <?php
                     // include "include/connection.php";
                     // $sql = "SELECT DISTINCT name, image , price FROM product"; 
@@ -124,7 +125,7 @@ include("../../App/http/controllers/order/admin_making_order.php");
                         
                     
                     ?>
-                        <div class="col-md-3 card text-center border border-0">
+                        <div class="col-md-3 card text-center border border-0" id="filteredProducts">
                             <div class="card-body p-2 productId" id="<?php echo $product["id"]; ?>">
                                 <img src="pepsi2.png" alt="<?php echo $alt; ?>" data-bs-toggle="collapse" data-bs-target="#paragraph"  width='100' height='100'>
                                 <p class="fw-bold text-uppercase text-center productName "><?php echo $product["name"]; ?></p>
@@ -145,6 +146,31 @@ include("../../App/http/controllers/order/admin_making_order.php");
 
 
 <script>
+  // Get all product cards
+  const productCards = document.querySelectorAll('.productId');
+
+// Get the search input field
+const searchInput = document.querySelector('#searchInput');
+
+// Get the filtered products container
+const filteredProducts = document.querySelector('#filteredProducts');
+
+// Add a listener for changes to the search input field
+searchInput.addEventListener('input', () => {
+    const searchString = searchInput.value.toLowerCase();
+
+    // Remove all products from the filtered products container
+    filteredProducts.innerHTML = '';
+
+    // Loop through all product cards and add them to the filtered products container if they match the search string
+    productCards.forEach(card => {
+        const productName = card.querySelector('.productName').textContent.toLowerCase();
+        if (productName.includes(searchString)) {
+            filteredProducts.appendChild(card);
+        }
+    });
+});
+
   const productIds = document.querySelectorAll(".productId");
 
   productIds.forEach((productId) => {
@@ -256,11 +282,13 @@ rows.forEach(row => {
   const quantityInput = row.querySelector("input[type='number']");
   const quantity = parseInt(quantityInput.value);
   data.products[productId] = quantity;
+  // data.products[quantity] = quantity;
+
 });
 
 
 const jsonData = JSON.stringify(data); 
-const params = 'jsondata=' + encodeURIComponent(jsonData);
+const params = 'jsondata=' + jsonData;
 
 const xhr = new XMLHttpRequest();
 xhr.open('POST', '../../App/http/controllers/order/add_order.php');
@@ -268,42 +296,17 @@ xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
 xhr.onreadystatechange = function() {
   if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-    // console.log(xhr.responseText);
+    console.log("respovsee"+xhr.responseText);
   }
 };
 console.log(params);
 xhr.send(params);
 
-// const xhr = new XMLHttpRequest();
-// xhr.open('POST', '../../App/http/controllers/order/add_order.php');
-// xhr.setRequestHeader('Content-Type', 'application/json');
-// console.log(JSON.stringify(data));
-// xhr.send(JSON.stringify(data));
 
-// const jsonData = JSON.stringify(data); 
-
-// console.log('JSON data:', jsonData);
-// xhr.send(JSON.stringify(data));   
-// xhr.send("hhh");   
-
-
-// xhr.onreadystatechange = function() {
-//   if (this.readyState == 4 && this.status == 200) {
-//     console.log(this.responseText);
-//     const response = JSON.parse(this.responseText);
-//     // $json_data = json_encode(this.responseText);
-//     // console.log($json_data);
-//     if (this.responseText.status == "success") {
-//       console.log(this.responseText.status);
-//       alert("Order added successfully");
-//       window.location.reload();
-//     } else {
-//       console.log(this.responseText.status);
-//       alert("Error adding order");
-//     }
-//   }
-// };
 });
+
+
+
 
 </script>
 
@@ -311,8 +314,6 @@ xhr.send(params);
 <?php
 include "include/layouts/footer.php"
 ?>
-
-
 
 
 

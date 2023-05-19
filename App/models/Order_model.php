@@ -15,7 +15,7 @@ function insertOrder($note,$amount,$userID){
     $conn= connectDb();
    
     // prepare sql and bind parameters
-    $stmt = $conn->prepare("INSERT INTO order (note,amount,userID) 
+    $stmt = $conn->prepare("INSERT INTO `order` (note, amount, userID) 
     VALUES (:note, :amount, :userID)");
     $stmt->bindParam(':note', $note);
     $stmt->bindParam(':amount', $amount);

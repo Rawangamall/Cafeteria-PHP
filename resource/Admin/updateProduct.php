@@ -10,7 +10,9 @@
 
     // get the value of the id parameter (if it was passed)
     $id = isset($_GET['id']) ? $_GET['id'] : '';
-    include "include/connection.php";
+    // include "include/connection.php";
+    include("../../App/models/Core/dbConnection.php");
+$db = connectDb(); 
 
     // retrieve product data from database
     $sql = "SELECT * FROM product WHERE id = ?";

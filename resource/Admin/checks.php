@@ -119,28 +119,6 @@ include("../../App/http/Controllers/CheckController.php");
 </div>
 
 <script>
-// function sendDatesToController(fromDate, toDate , user_id) {
-//   var xhr = new XMLHttpRequest();
-//   xhr.open('POST', '../../App/http/Controllers/CheckController.php');
-//   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-//   xhr.onload = function() {
-//     if (xhr.status === 200) {
-//       // Process the response
-//       console.log(xhr.responseText)
-//       var orders = JSON.parse(xhr.responseText);
-//        console.log(orders);
-//     } else {
-//       console.error('Request failed. Status:', xhr.status);
-//     }
-    
-//   };
-//   // Create the payload with the selected dates
-//   var data = 'fromDate=' + fromDate + '&toDate=' + toDate + '&user_id=' + user_id;
-//   // Send the request
-//   console.log('User ID:', user_id);
-
-//   xhr.send(data);
-// }
 
 document.addEventListener('DOMContentLoaded', function() {
   var dropdown = document.getElementById('user-dropdown');
@@ -190,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
             iconElement.classList.add('fa-minus');
             console.log(fromDateElement.value);
             var user_id = user[0]['id'];
-            // sendDatesToController(fromDateElement.value, toDateElement.value ,user_id);
 
             var BtnuserId = this.getAttribute('data-userid');
 

@@ -1,3 +1,8 @@
+<?php
+include("../../App/http/controllers/Product/allProducts.php");
+include("../../App/http/controllers/Category/allCategories.php");
+
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -98,8 +103,8 @@
                                         </ul>
                                     </li>
                                     <li><a href="about.html">About</a></li>
-                                    <li class="active"><a href="menu.html">Menu</a></li>
-                                    <li><a href="reservation.html">Reservation</a></li>
+                                    <li class="active"><a href="menu.php">Menu</a></li>
+                                    <!-- <li><a href="reservation.html">Reservation</a></li> -->
                                 </ul>
                             </nav>
                         </div>
@@ -362,42 +367,9 @@
                         <a href="#0" class="remove"><i class="fal fa-times"></i></a>
                     </div>
                 </div>
-                <div class="cart-bar__item position-relative d-flex">
-                    <div class="thumb">
-                        <img src="assets/images/top-grade/tg-2.png" alt="image_not_found">
-                    </div>
-                    <div class="content">
-                        <h4 class="title">
-                            <a href="product-details.html">Rorem ipsum dolor sit amet.</a>
-                        </h4>
-                        <span class="price">$36.00</span>
-                        <a href="#0" class="remove"><i class="fal fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="cart-bar__item position-relative d-flex">
-                    <div class="thumb">
-                        <img src="assets/images/top-grade/tg-3.png" alt="image_not_found">
-                    </div>
-                    <div class="content">
-                        <h4 class="title">
-                            <a href="product-details.html">Rorem ipsum dolor sit amet.</a>
-                        </h4>
-                        <span class="price">$20.00</span>
-                        <a href="#0" class="remove"><i class="fal fa-times"></i></a>
-                    </div>
-                </div>
-                <div class="cart-bar__item position-relative d-flex">
-                    <div class="thumb">
-                        <img src="assets/images/top-grade/tg-4.png" alt="image_not_found">
-                    </div>
-                    <div class="content">
-                        <h4 class="title">
-                            <a href="product-details.html">Rorem ipsum dolor sit amet.</a>
-                        </h4>
-                        <span class="price">$20.00</span>
-                        <a href="#0" class="remove"><i class="fal fa-times"></i></a>
-                    </div>
-                </div>
+                
+                
+                
             </div>
             <div class="cart-bar__subtotal d-flex align-items-center justify-content-between">
                 <span>Sub Total:</span>
@@ -450,14 +422,15 @@
                 <div class="row">
                     <div class="col-xl-12 text-center">
                         <div class="popular-menu__wrapper m-auto d-inline-block">
+                            
                             <div class="popular-menu__filter d-flex justify-content-center align-items-center mb-45">
                                 <button class="active" data-filter="*">All</button>
                                 <?php
-                                    include "../Admin/include/connection.php";
-                                    $sql = "SELECT id, name FROM category"; 
-                                    $result = $db->query($sql);
-                                    if ($result->rowCount() > 0) {
-                                        foreach ($result as $row) {
+                                    // include "../Admin/include/connection.php";
+                                    // $sql = "SELECT id, name FROM category"; 
+                                    // $result = $db->query($sql);
+                                    if ($allCategories) {
+                                        foreach ($allCategories as $row) {
                                             echo '<button data-filter=".cat'.$row['id'].'">'.$row['name'].'</button>';
                                         }
                                     }
@@ -469,20 +442,20 @@
                 <div id="popular-menu-grid-2" class="row popular-menu__grid popular-menu__lists mt-none-30">
                     <div class="col-xl-6 col-lg-6 col-md-6 l-item grid-sizer"></div>
                     <?php
-                        include "../Admin/include/connection.php";
-                        $sql = "SELECT image, name, price FROM product";
-                        $result = $db->query($sql);
-                        if ($result->rowCount() > 0) {
-                            foreach ($result as $row) {
+                        // include "../Admin/include/connection.php";
+                        // $sql = "SELECT image, name, price FROM product";
+                        // $result = $db->query($sql);
+                        if ($allProducts) {
+                            foreach ($allProducts as $row) {
                     ?>
                                 <div class="col-xl-6 col-lg-6 col-md-6 l-item grid-item cat1 cat2 cat3 mt-35">
-                                    <div class="popular-menu__list">
+                                <div class="popular-menu__list" data-product-id="<?php echo $row['id']; ?>">
                                         <div class="thumb">
-                                            <img src="../Admin/uploads/product/<?php echo $row['image']; ?>" alt="">
+                                            <img src="../Admin/<?php echo $row['image']; ?>" alt="">
                                         </div>
                                         <div class="content">
                                             <h3 class="title border-effect"><a href="#0"><?php echo $row['name']; ?></a></h3>
-                                            <span class="price">$<?php echo $row['price']; ?></span>
+                                            <span class="price">EGP <?php echo $row['price']; ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -491,11 +464,7 @@
                         }
                     ?>
                 </div>
-                <div class="row">
-                    <div class="col-xl-12 text-center">
-                        <a href="#0" class="site-btn mt-60">load more</a>
-                    </div>
-                </div>
+              
             </div>
         </section>
         <!-- populer menu area end -->
@@ -591,6 +560,90 @@
     </footer>
 
     <!--========= JS Here =========-->
+    
+    <!-- <script>
+       
+
+
+
+const  productElements = document.querySelectorAll('.popular-menu__list');
+productElements.forEach((productElement) => {
+    console.log(productElement);
+  productElement.addEventListener('click',handleClick ); }); 
+    // Retrieve the product data from the clicked element
+
+    function handleClick() {
+    console.log(productElement);
+    const productId = productElement.dataset.productId;
+    const productName = productElement.querySelector('.title a').textContent;
+    const productPrice = productElement.querySelector('.price').textContent;
+    const productImage = productElement.querySelector('.thumb img').src;
+
+    console.log('Product clicked:', productId, productName, productPrice, productImage);
+
+    // Update the cart with the product data
+    updateCart(productId, productName, productPrice, productImage);
+ 
+    }
+  function updateCart(productId, productName, productPrice,productImage) {
+  const cartBar = document.querySelector('.cart-bar__lists');
+
+  // Check if the product is already in the cart
+  const existingCartItem = cartBar.querySelector(`[data-product-id="${productId}"]`);
+  if (existingCartItem) {
+    // If the product is already in the cart, increase its quantity
+    const quantityElement = existingCartItem.querySelector('.quantity');
+    quantityElement.textContent = parseInt(quantityElement.textContent) + 1;
+  } else {
+    // If the product is not in the cart, create a new cart item element
+    const cartItemElement = document.createElement('div');
+    cartItemElement.classList.add('cart-bar__item', 'position-relative', 'd-flex');
+    cartItemElement.setAttribute('data-product-id', productId);
+    cartItemElement.innerHTML = `
+      <div class="thumb">
+      <?php
+      if($productImage!="")
+        {
+            ?>
+        <img src="../Admin/${productImage}" alt="">
+        <?php } ?>
+      </div>
+      <div class="content">
+        <h4 class="title">
+          <a href="product-details.html">${productName}</a>
+        </h4>
+        <span class="price">${productPrice}</span>
+        <div class="quantity">1</div>
+        <a href="#0" class="remove"><i class="fal fa-times"></i></a>
+      </div>
+    `;
+    console.log(cartItemElement);
+    cartBar.appendChild(cartItemElement);
+  }
+
+  // Update the cart subtotal
+  updateCartSubtotal();
+}
+function updateCartSubtotal() {
+  const cartBar = document.querySelector('.cart-bar');
+  const cartItems = cartBar.querySelectorAll('.cart-bar__item');
+
+  let subtotal = 0;
+  cartItems.forEach((cartItem) => {
+    const priceElement = cartItem.querySelector('.price');
+    const quantityElement = cartItem.querySelector('.quantity');
+    const price = parseFloat(priceElement.textContent.replace('$', ''));
+    const quantity = parseInt(quantityElement.textContent);
+    subtotal += price * quantity;
+  });
+
+  const subtotalElement = cartBar.querySelector('.cart-bar__subtotal span:last-child');
+  subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+}
+
+
+
+        </script> -->
     <script src="assets/js/jquery-2.2.4.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/jquery.meanmenu.min.js"></script>

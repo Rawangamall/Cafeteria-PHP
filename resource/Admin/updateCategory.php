@@ -13,7 +13,9 @@ include "include/layouts/header.php";
 
     // get the value of the id parameter (if it was passed)
     $id = isset($_GET['id']) ? $_GET['id'] : '';
-    include "include/connection.php";
+    // include "include/connection.php";
+    include("../../App/models/Core/dbConnection.php");
+$db = connectDb(); 
 
     // retrieve category data from database
     $sql = "SELECT * FROM category WHERE id = ?";
